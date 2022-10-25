@@ -18,9 +18,10 @@ $ cd 2022li1g031
 
 ## Interpretador
 
-Pode abrir o interpretador do Haskell (GHCi) utilizando o cabal ou diretamente.
+Pode abrir o interpretador do Haskell (GHCi) utilizando o cabal ou diretamente
+o interpretador.
 
-1. Usando o cabal
+1. Usando o `cabal`
 
 ```bash
 $ cabal repl
@@ -63,15 +64,15 @@ $ runhaskell -i="src" -i="tests" tests/Spec.hs
 
 ## Documentação
 
-Pode gerar a documentação com o `haddock`.
+Pode gerar a documentação com o [Haddock](https://haskell-haddock.readthedocs.io/).
 
-1. Usando o cabal
+1. Usando o `cabal`
 
 ```bash
 $ cabal haddock --haddock-all
 ```
 
-2. Usando diretamente o Haddock
+2. Usando diretamente o `haddock`
 
 ```bash
 $ haddock -h -o doc/html src/*.hs
