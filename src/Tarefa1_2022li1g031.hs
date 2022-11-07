@@ -12,10 +12,24 @@ module Tarefa1_2022li1g031 where
 import LI12223
 import Data.List (group)
 
+{- |Esta função verifica se um dado mapa não viola nenhuma das seguintes restrições:
+
+1. Não existem obstáculos em terrenos impróprios, e.g. troncos em estradas ou relvas, árvores em rios ou estradas, etc.
+2. Rios contı́guos têm direcções opostas.
+3. Troncos têm, no máximo, 5 unidades de comprimento.
+4. Carros têm, no máximo, 3 unidades de comprimento.
+5. Em qualquer linha existe, no mı́nimo, um “obstáculo” Nenhum. Ou seja, uma linha não pode ser composta exclusivamente por obstáculos, precisando de haver pelo menos um espaço livre.
+6. O comprimento da lista de obstáculos de cada linha corresponde exactamente à largura do mapa.
+7. Contiguamente, não devem existir mais do que 4 rios, nem 5 estradas ou relvas.
+
+== Exemplos de utilização:
+>>> 
+
+-}
+
 mapaValido :: Mapa -> Bool
 
-mapaValido (Mapa _ []) = True
-mapaValido (Mapa largura linhaMapa) = restricaoObstaculos linhaMapa
+mapaValido (Mapa largura linhasMapa) = restricaoObstaculos linhasMapa && restricaoRiosContiguos linhasMapa && restricaoTamanhoObstaculos linhasMapa && restricaoquantidadeObstaculos linhasMapa && restricaoTamanhoLinha (Mapa largura linhasMapa) && restricaoQuantidadeTerrenos linhasMapa
 
 {- |Não existem obstáculos em terrenos impróprios, e.g. troncos em es-
 tradas ou relvas, árvores em rios ou estradas, etc.
