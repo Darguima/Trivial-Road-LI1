@@ -6,6 +6,13 @@ import Test.HUnit
 
 testsT1 :: Test
 
+mapaValidoTestes = TestList [
+  "Teste Mapa Válido 01" ~: True ~=? mapaValido (Mapa 3 [(Rio 5, [Nenhum, Tronco, Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum]), (Rio (-5), [Nenhum, Nenhum, Tronco]), (Rio 1, [Nenhum, Nenhum, Tronco])]),
+  "Teste Mapa Válido 02" ~: False ~=? mapaValido (Mapa 4 [(Rio 5, [Nenhum, Tronco, Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum, Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum]), (Rio (-5), [Nenhum, Nenhum, Tronco]), (Rio 1, [Nenhum, Nenhum, Tronco])]),
+  "Teste Mapa Válido 03" ~: False ~=? mapaValido (Mapa 4 [(Rio 5, [Nenhum, Tronco, Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum]), (Rio 5, [Nenhum, Nenhum, Tronco]), (Rio 1, [Nenhum, Nenhum, Tronco])]),
+  "Teste Mapa Válido 04" ~: False ~=? mapaValido (Mapa 4 [(Rio 5, [Nenhum, Tronco, Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum]), (Rio 5, [Nenhum, Nenhum, Tronco]), (Rio 1, [Nenhum, Nenhum, Tronco])])
+  ]
+
 restricaoObstaculosTests = TestList [
   "Teste Obstaculos Rio 01" ~: True ~=? restricaoObstaculos[(Rio 5, [Nenhum, Nenhum, Nenhum]), (Rio 3 , [Nenhum,Tronco,Nenhum]), (Rio 2 , [Tronco,Tronco,Tronco])],
   "Teste Obstaculos Rio 02" ~: True ~=? restricaoObstaculos[(Rio (-6), [Nenhum, Tronco, Nenhum])],
