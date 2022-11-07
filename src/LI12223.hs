@@ -13,7 +13,7 @@ module LI12223 (
   -- ** Básicos
   Coordenadas , Largura , Velocidade,
   -- ** Mapas
-  Mapa(..), Terreno(..), Obstaculo(..),
+  Mapa(..), LinhaDoMapa , Terreno(..), Obstaculo(..),
     -- ** Jogo
   Jogo(..), Jogador(..), Direcao(..), Jogada(..)
   ) where
@@ -38,6 +38,9 @@ data Obstaculo
   | Carro -- ^ os carros movimentam-se apenas em 'Estrada'
   | Arvore -- ^ as árvores são um obstáculo fixo que não se move e apenas são possíveis em 'Relva'
   deriving (Show, Read, Eq)
+
+-- | Uma linha de um 'Mapa'.
+type LinhaDoMapa = (Terreno, [Obstaculo])
 
 -- | Comprimento de um 'Mapa'.
 type Largura = Int
