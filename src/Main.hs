@@ -6,5 +6,6 @@ import Tarefa2_2022li1g031
 import Tarefa3_2022li1g031
 import Tarefa4_2022li1g031
 
+
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = print "ARROZ"

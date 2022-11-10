@@ -52,6 +52,9 @@ restricaoTamanhoObstaculosTestes = TestList [
   "Teste Troncos no Rio 06" ~: True ~=? restricaoTamanhoObstaculos [(Rio 5, [Nenhum, Tronco, Tronco, Tronco, Nenhum]), (Estrada 5, [Nenhum, Carro, Carro, Nenhum, Nenhum]), (Rio 5, [Nenhum, Tronco, Tronco, Tronco, Nenhum, Nenhum])],
   "Teste Troncos no Rio 07" ~: False ~=? restricaoTamanhoObstaculos [(Rio 5, [Nenhum, Tronco, Tronco, Tronco, Tronco, Tronco, Tronco, Nenhum])],
   "Teste Troncos no Rio 08" ~: False ~=? restricaoTamanhoObstaculos [(Rio 5, [Nenhum, Tronco, Tronco, Nenhum, Tronco, Nenhum]), (Estrada 5, [Nenhum, Carro, Carro, Nenhum, Nenhum]), (Rio 5, [Nenhum, Tronco, Tronco, Tronco, Tronco, Tronco, Tronco, Nenhum, Nenhum])],
+  
+  "Teste Troncos no Rio 09" ~: True ~=? restricaoTamanhoObstaculos [(Rio 5, [Tronco, Tronco, Nenhum, Tronco, Tronco, Tronco])],
+  "Teste Troncos no Rio 10" ~: False ~=? restricaoTamanhoObstaculos [(Rio 5, [Tronco, Tronco, Nenhum, Nenhum, Tronco, Tronco, Tronco, Tronco])],
 
   "Teste Carros na Estada 01" ~: True ~=? restricaoTamanhoObstaculos [(Estrada 5, [Nenhum, Nenhum, Nenhum, Nenhum, Nenhum, Nenhum, Nenhum, Nenhum])],
   "Teste Carros na Estada 02" ~: True ~=? restricaoTamanhoObstaculos [(Estrada 5, [Nenhum, Carro, Carro, Carro, Nenhum, Nenhum, Nenhum, Nenhum])],
@@ -60,7 +63,10 @@ restricaoTamanhoObstaculosTestes = TestList [
   "Teste Carros na Estada 05" ~: True ~=? restricaoTamanhoObstaculos [(Estrada 5, [Carro, Carro, Carro, Nenhum, Nenhum, Carro, Carro, Nenhum])],
   "Teste Carros na Estada 06" ~: True ~=? restricaoTamanhoObstaculos [(Estrada 5, [Nenhum, Carro, Carro, Carro, Nenhum]), (Rio 5, [Nenhum, Tronco, Tronco, Nenhum, Nenhum]), (Estrada 5, [Nenhum, Carro, Carro, Carro, Nenhum, Nenhum])],
   "Teste Carros na Estada 07" ~: False ~=? restricaoTamanhoObstaculos [(Estrada 5, [Nenhum, Carro, Carro, Carro, Carro, Carro, Carro, Nenhum])],
-  "Teste Carros na Estada 08" ~: False ~=? restricaoTamanhoObstaculos [(Estrada 5, [Nenhum, Carro, Carro, Nenhum, Carro, Nenhum]), (Rio 5, [Nenhum, Tronco, Tronco, Tronco, Tronco, Nenhum, Nenhum]), (Estrada 5, [Nenhum, Carro, Carro, Carro, Carro, Carro, Carro, Nenhum, Nenhum])]
+  "Teste Carros na Estada 08" ~: False ~=? restricaoTamanhoObstaculos [(Estrada 5, [Nenhum, Carro, Carro, Nenhum, Carro, Nenhum]), (Rio 5, [Nenhum, Tronco, Tronco, Tronco, Tronco, Nenhum, Nenhum]), (Estrada 5, [Nenhum, Carro, Carro, Carro, Carro, Carro, Carro, Nenhum, Nenhum])],
+  
+  "Teste Carros na Estada 09" ~: True ~=? restricaoTamanhoObstaculos [(Estrada 5, [Carro, Carro, Nenhum, Carro])],
+  "Teste Carros na Estada 10" ~: False ~=? restricaoTamanhoObstaculos [(Estrada 5, [Carro, Carro, Nenhum, Nenhum, Carro, Carro])]
   ]
 
 

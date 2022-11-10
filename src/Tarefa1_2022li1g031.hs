@@ -23,7 +23,11 @@ import Data.List (group)
 7. Contiguamente, não devem existir mais do que 4 rios, nem 5 estradas ou relvas.
 
 == Exemplos de utilização:
->>> 
+>>> mapaValido (Mapa 3 [(Rio 5, [Nenhum, Tronco, Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum]), (Rio (-5), [Nenhum, Nenhum, Tronco]), (Rio 1, [Nenhum, Nenhum, Tronco])])
+True
+
+>>> mapaValido (Mapa 4 [(Rio 5, [Nenhum, Tronco, Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum, Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum]), (Rio (-5), [Nenhum, Nenhum, Tronco]), (Rio 1, [Nenhum, Nenhum, Tronco])])
+False
 
 -}
 
@@ -87,13 +91,22 @@ False
 
 restricaoTamanhoObstaculos :: [LinhaDoMapa] -> Bool 
 
+-- tronco ___ tronco tronco tronco  
+
 restricaoTamanhoObstaculos [] = True 
-restricaoTamanhoObstaculos ((Rio _ , obstaculos) : t) = checkarLinha 5 obstaculos && restricaoTamanhoObstaculos t
-restricaoTamanhoObstaculos ((Estrada _ , obstaculos) : t) = checkarLinha 3 obstaculos && restricaoTamanhoObstaculos  t
+restricaoTamanhoObstaculos ((Rio _ , obstaculos) : t) = checkarTamanhoObstaculosLinha 5 obstaculos && restricaoTamanhoObstaculos t
+restricaoTamanhoObstaculos ((Estrada _ , obstaculos) : t) = checkarTamanhoObstaculosLinha 3 obstaculos && restricaoTamanhoObstaculos  t
 restricaoTamanhoObstaculos ((Relva, obstaculos) : t) = restricaoTamanhoObstaculos t
       
-checkarLinha :: Int -> [Obstaculo] -> Bool  
-checkarLinha tamanhoMaximo obstaculos = not (any (\ grupo -> length grupo > tamanhoMaximo && head grupo /= Nenhum) (group obstaculos)) 
+checkarTamanhoObstaculosLinha :: Int -> [Obstaculo] -> Bool  
+checkarTamanhoObstaculosLinha tamanhoMaximo obstaculos = 
+  not (any (\ grupo -> length grupo > tamanhoMaximo && head grupo /= Nenhum) grupos || firstLineElement == lastLineElement && firstLineElement /= Nenhum && (length firstLineGroup + length lastLineGroup) > tamanhoMaximo)  
+  where grupos = group obstaculos 
+        firstLineGroup = head grupos
+        firstLineElement = head firstLineGroup
+        lastLineGroup = last grupos
+        lastLineElement = last lastLineGroup
+  
 
 {- |Em qualquer linha existe, no mínimo, um “obstáculo” Nenhum. Ou seja, uma linha não pode ser composta exclusivamente por obstáculos, precisando de haver pelo menos um espaço livre.
 
@@ -144,3 +157,5 @@ restricaoQuantidadeTerrenos ((Rio _, _) : (Rio _, _) : (Rio _, _) : (Rio _, _) :
 restricaoQuantidadeTerrenos ((Estrada _, _) : (Estrada _, _) : (Estrada _, _) : (Estrada _, _) : (Estrada _, _) : (Estrada _, _) : t) = False
 restricaoQuantidadeTerrenos ((Relva, _) : (Relva, _) : (Relva, _) : (Relva, _) : (Relva, _) : (Relva, _) : t) = False
 restricaoQuantidadeTerrenos (h : t) = restricaoQuantidadeTerrenos t
+
+
