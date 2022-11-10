@@ -109,6 +109,7 @@ proximosObstaculosValidos :: Int -> LinhaDoMapa -> [Obstaculo]
 proximosObstaculosValidos largura (Rio _ , obstaculos)
   | length obstaculos == largura = []
   | length obstaculos == largura - 1  && Nenhum `notElem` obstaculos = [Nenhum]
+  | length obstaculos == largura - 1  && Tronco `notElem` obstaculos = [Tronco]
   | not (checkarTamanhoObstaculosLinha 5 (obstaculos ++ [Tronco]))  = [Nenhum]
   | otherwise = [Nenhum, Tronco]
 

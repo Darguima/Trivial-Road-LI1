@@ -20,6 +20,7 @@ proximosObstaculosValidosTestes = TestList [
   "Teste Obstáculos Válidos Rio 03" ~: [Nenhum] ~=?   proximosObstaculosValidos 4 (Rio 2, [Tronco, Tronco, Tronco]),
   "Teste Obstáculos Válidos Rio 04" ~: [Nenhum, Tronco] ~=?   proximosObstaculosValidos 7 (Rio 2, [Nenhum, Tronco, Tronco, Tronco, Tronco]),
   "Teste Obstáculos Válidos Rio 05" ~: [Nenhum] ~=?   proximosObstaculosValidos 7 (Rio 2, [Nenhum, Tronco, Tronco, Tronco, Tronco, Tronco]),
+  "Teste Obstáculos Válidos Rio 05" ~: [Tronco] ~=?   proximosObstaculosValidos 7 (Rio 2, [Nenhum, Nenhum, Nenhum, Nenhum, Nenhum, Nenhum]),
 
   "Teste Obstáculos Válidos Estrada 01" ~: [Nenhum, Carro] ~=?   proximosObstaculosValidos 4 (Estrada 2, [Nenhum,Nenhum,Carro ]),
   "Teste Obstáculos Válidos Estrada 02" ~: [] ~=?   proximosObstaculosValidos 3 (Estrada 2, [Nenhum,Nenhum,Carro ]),
@@ -36,10 +37,10 @@ proximosObstaculosValidosTestes = TestList [
 estendeMapaTestes = TestList [
   "Teste Estende Mapa 01" ~: Mapa 5 [(Relva,[Arvore,Arvore,Arvore,Arvore,Nenhum])] ~=? estendeMapa (Mapa 5 []) 5,
   "Teste Estende Mapa 02" ~: Mapa 5 [(Estrada 1,[Carro,Nenhum,Carro,Carro,Nenhum]),(Rio 2,[Tronco,Tronco,Tronco,Tronco,Nenhum])] ~=? estendeMapa (Mapa 5 [(Rio 2, [Tronco,Tronco,Tronco,Tronco,Nenhum])]) 3,
-  "Teste Estende Mapa 03" ~: Mapa 5 [(Rio 1,[Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]),(Rio (-2),[Tronco,Tronco,Tronco,Tronco,Nenhum])] ~=? estendeMapa (Mapa 5 [(Rio (-2), [Tronco,Tronco,Tronco,Tronco,Nenhum])]) 4,
-  "Teste Estende Mapa 03" ~: Mapa 5 [(Rio (-4),[Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]),(Rio 1,[Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]),(Rio (-2),[Tronco,Tronco,Tronco,Tronco,Nenhum])] ~=? estendeMapa (Mapa 5 [(Rio 1,[Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]),(Rio (-2),[Tronco,Tronco,Tronco,Tronco,Nenhum])]) 4,
+  "Teste Estende Mapa 03" ~: Mapa 5 [(Rio 1,[Nenhum,Nenhum,Nenhum,Nenhum,Tronco]),(Rio (-2),[Tronco,Tronco,Tronco,Tronco,Nenhum])] ~=? estendeMapa (Mapa 5 [(Rio (-2), [Tronco,Tronco,Tronco,Tronco,Nenhum])]) 4,
+  "Teste Estende Mapa 04" ~: Mapa 5 [(Rio (-4),[Nenhum,Nenhum,Nenhum,Nenhum,Tronco]),(Rio 1,[Nenhum,Tronco,Tronco,Tronco,Nenhum]),(Rio (-2),[Tronco,Tronco,Tronco,Tronco,Nenhum])] ~=? estendeMapa (Mapa 5 [(Rio 1,[Nenhum,Tronco,Tronco,Tronco,Nenhum]),(Rio (-2),[Tronco,Tronco,Tronco,Tronco,Nenhum])]) 4,
 
-  "Teste Estende Mapa 05" ~: Mapa 5 [(Rio 2,[Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]),(Estrada (-1),[Tronco,Tronco,Tronco,Tronco,Nenhum])] ~=? estendeMapa (Mapa 5 [(Estrada (-1), [Tronco,Tronco,Tronco,Tronco,Nenhum])]) 4
+  "Teste Estende Mapa 05" ~: Mapa 5 [(Rio 2,[Nenhum,Nenhum,Nenhum,Nenhum,Tronco]),(Estrada (-1),[Tronco,Tronco,Tronco,Tronco,Nenhum])] ~=? estendeMapa (Mapa 5 [(Estrada (-1), [Tronco,Tronco,Tronco,Tronco,Nenhum])]) 4
   ]
 
 testsT2 = TestList [
