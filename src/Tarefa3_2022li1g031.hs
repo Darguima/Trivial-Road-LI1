@@ -44,11 +44,11 @@ oposto.
 
 
 animaJogo :: Jogo -> Jogada -> Jogo
-animaJogo jogo Parado = auxiliarParado jogo  
-animaJogo jogo (Move Cima) = auxiliarCima jogo 
-animaJogo jogo (Move Baixo) = auxiliarBaixo jogo 
-animaJogo jogo (Move Esquerda) = auxiliarEsquerda jogo 
-animaJogo jogo (Move Direita) = auxiliarDireita jogo 
+animaJogo jogo Parado = auxiliarParado jogo
+animaJogo jogo (Move Cima) = auxiliarCima jogo
+animaJogo jogo (Move Baixo) = auxiliarBaixo jogo
+animaJogo jogo (Move Esquerda) = auxiliarEsquerda jogo
+animaJogo jogo (Move Direita) = auxiliarDireita jogo
 
 {- | Auxiliar Direita
 
@@ -59,11 +59,11 @@ animaJogo jogo (Move Direita) = auxiliarDireita jogo
  | otherwise = auxiliarParado  (Jogo (Jogador (x ,y)) (Mapa l  (  linhamapa)))
  @
 -}
-auxiliarDireita :: Jogo-> Jogo 
-auxiliarDireita (Jogo (Jogador (x,y)) (Mapa l linhamapa)) 
- | x+1<l && (emArvoreDireita (x,y) (linhamapa)) == False =auxiliarParado  (Jogo (Jogador (x+1,y)) (Mapa l  ( linhamapa)))
- | x-1<l && (emArvoreDireita (x,y) (linhamapa)) == True = auxiliarParado  (Jogo (Jogador (x,y)) (Mapa l  ( linhamapa)))
- | otherwise = auxiliarParado  (Jogo (Jogador (x ,y)) (Mapa l  (  linhamapa)))
+
+auxiliarDireita :: Jogo-> Jogo
+auxiliarDireita (Jogo (Jogador (x,y)) (Mapa l linhamapa))
+ | x+1<l && not (emArvoreDireita (x,y) linhamapa) =auxiliarParado  (Jogo (Jogador (x+1,y)) (Mapa l  linhamapa))
+ | otherwise = auxiliarParado  (Jogo (Jogador (x ,y)) (Mapa l  linhamapa))
 
 
 {- | Auxiliar Esquerda
@@ -77,14 +77,11 @@ auxiliarEsquerda (Jogo (Jogador (x,y)) (Mapa l linhamapa))
 -}
 
 
-auxiliarEsquerda :: Jogo-> Jogo 
-auxiliarEsquerda (Jogo (Jogador (x,y)) (Mapa l linhamapa)) 
- | x-1>=0 && (emArvoreEsquerda (x,y) (linhamapa)) == False =auxiliarParado  (Jogo (Jogador (x-1,y)) (Mapa l  ( linhamapa)))
- | x-1>=0 && (emArvoreEsquerda (x,y) (linhamapa)) == True = auxiliarParado  (Jogo (Jogador (x,y)) (Mapa l  ( linhamapa)))
- | otherwise = auxiliarParado  (Jogo (Jogador (x,y)) (Mapa l  ( linhamapa)))
-
+auxiliarEsquerda :: Jogo-> Jogo
+auxiliarEsquerda (Jogo (Jogador (x,y)) (Mapa l linhamapa))
+ | x-1>=0 && not (emArvoreEsquerda (x,y) linhamapa) =auxiliarParado  (Jogo (Jogador (x-1,y)) (Mapa l  linhamapa))
+ | otherwise = auxiliarParado  (Jogo (Jogador (x,y)) (Mapa l  linhamapa))
 {- | Auxiliar Baixo
-
 @ 
 auxiliarBaixo (Jogo (Jogador (x,y)) (Mapa l linhamapa)) 
  | y+1 < l &&  emArvoreBaixo (x,y) (linhamapa) == True = auxiliarParado (Jogo (Jogador (x,y)) (Mapa l linhamapa) )
@@ -94,11 +91,10 @@ auxiliarBaixo (Jogo (Jogador (x,y)) (Mapa l linhamapa))
 @
 -}
 
-auxiliarBaixo :: Jogo -> Jogo 
-auxiliarBaixo (Jogo (Jogador (x,y)) (Mapa l linhamapa)) 
- | y+1 < l &&  emArvoreBaixo (x,y) (linhamapa) == True = auxiliarParado (Jogo (Jogador (x,y)) (Mapa l linhamapa) )
- | y+1< l  = (Jogo (Jogador (x,y+1)) (Mapa l (moveObstaculos linhamapa))) 
- | otherwise =  auxiliarParado (Jogo (Jogador (x,(y))) (Mapa l  ( linhamapa)))
+auxiliarBaixo :: Jogo -> Jogo
+auxiliarBaixo (Jogo (Jogador (x,y)) (Mapa l linhamapa))
+ | y+1 < l &&  not (emArvoreBaixo (x,y) linhamapa) = auxiliarParado (Jogo (Jogador (x,y+1)) (Mapa l linhamapa))
+ | otherwise =  auxiliarParado (Jogo (Jogador (x,y)) (Mapa l linhamapa))
 
 {- | Auxiliar Cima
 
@@ -111,11 +107,11 @@ auxiliarCima (Jogo (Jogador (x,y)) (Mapa l linhamapa) )
 @
 
 -}
-auxiliarCima :: Jogo -> Jogo 
-auxiliarCima (Jogo (Jogador (x,y)) (Mapa l linhamapa) ) 
-  | y-1>=0 && emArvoreCima (x,y) (linhamapa) == True = auxiliarParado (Jogo (Jogador (x,y)) (Mapa l linhamapa) )
-  | y-1>=0 && emArvoreCima (x,y) (linhamapa) == False =  (Jogo (Jogador (x,y-1)) (Mapa l ( moveObstaculos linhamapa)) )
-  | otherwise = auxiliarParado (Jogo (Jogador (x,y)) (Mapa l  ( linhamapa)))
+auxiliarCima :: Jogo -> Jogo
+auxiliarCima (Jogo (Jogador (x,y)) (Mapa l linhamapa) )
+  | y-1>=0 && not (emArvoreCima (x,y) linhamapa) = auxiliarParado (Jogo (Jogador (x,y-1)) (Mapa l linhamapa))
+  | otherwise = auxiliarParado (Jogo (Jogador (x,y)) (Mapa l linhamapa))
+
 
 {- | Auxiliar Parado
 
@@ -126,10 +122,10 @@ auxiliarParado (Jogo  (Jogador (x,y) ) (Mapa l a) )
 @
 -}
 
-auxiliarParado :: Jogo->  Jogo 
-auxiliarParado (Jogo  (Jogador (x,y) ) (Mapa l a) ) 
-  | emTronco (x,y) (a)  == False = (Jogo  (Jogador (x,y) ) (Mapa l  (moveObstaculos a) ))
-  | otherwise =  (Jogo  (Jogador (moveComTronco (x,y)( Mapa l a))) ) (Mapa l  (moveObstaculos a) )
+auxiliarParado :: Jogo ->  Jogo
+auxiliarParado (Jogo  (Jogador pos) (Mapa l linhasDoMapa) )
+  | emTronco pos linhasDoMapa = Jogo (Jogador (moveComTronco pos ( Mapa l linhasDoMapa))) (Mapa l  (moveObstaculos pos 0 linhasDoMapa) )
+  | otherwise = Jogo (Jogador pos ) (Mapa l (moveObstaculos pos 0 linhasDoMapa) )
 
 
 
@@ -141,10 +137,10 @@ Esta função é util principalmente nos casos em que o jogador ou está Parado,
 >>> emTronco (3,0) [(Rio 3 , [Nenhum,Nenhum,Nenhum,Tronco,Nenhum,Nenhum]),(Relva, [Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]))]
 False
 -}
-emTronco :: Coordenadas -> [LinhaDoMapa] -> Bool 
-emTronco (x,y) ( linhamapa)
- | ( snd(linhamapa !! y) !! x ) == Tronco = True 
- | otherwise= False 
+emTronco :: Coordenadas -> [LinhaDoMapa] -> Bool
+emTronco (x,y) linhamapa
+ | ( snd (linhamapa !! y) !! x ) == Tronco = True
+ | otherwise= False
 
 {- |A função moveComTronco foi construida para auxiliar na movimentação de um jogador quando este se encontra em cima de um Tronco com uma determinada velocidade. Assim, o jogador ou sai do mapa devido ao movimento do tronco (perdendo assim o jogo) ou então desloca-se até
 um ponto espeficio, dependendo da direção escolhida. 
@@ -155,8 +151,13 @@ um ponto espeficio, dependendo da direção escolhida.
 (6,0) - ou seja, devido ao facto de o Tronco se ter deslocado 3 unidades para a direita, o jogador sai do mapa, perdendo assim o jogo.
 -}
 moveComTronco :: Coordenadas -> Mapa -> Coordenadas
-moveComTronco (x,y) (Mapa l linhamapa)= if k > 0 && x+k>=l then (l,y) else if k <0 && x+k <0 then ((-1),y) else if k>0 && x+k<l then (x+k,y) else (x+k,y) 
-        where (Rio k , obstaculos) = linhamapa !! y   
+moveComTronco (x,y) (Mapa l linhamapa)
+  | velocidade > 0 && x+velocidade>=l = (l,y)
+  | velocidade <0 && x+velocidade <0 = (-1,y)
+  | velocidade>0 && x+velocidade<l = (x+velocidade,y)
+  | otherwise = (x+velocidade,y)
+  where
+      (Rio velocidade, obstaculos) = linhamapa !! y
 
 {- |As funções definidas de seguida, (emArvoreDireita, emArvoreEsquerda,emArvoreCima,emArvoreBaixo) foram construidas para determinar a presença de arvores nas direções determinadas pelo jogador.  
 Assim, apesar de possivelmente as funções poderem ser definidas todas numa, foram divididas em 4 de modo a tornar o processo mais simples e percetivel a todos. (Futuramente estas funções poderão vir a sofrer alterações, em contexto de melhoramento de desempenho.)
@@ -188,41 +189,38 @@ emArvoreBaixo (x,y) ( linhamapa)
 
 @
 -}
-emArvoreDireita :: Coordenadas -> [LinhaDoMapa]-> Bool 
-emArvoreDireita (x,y) ( linhamapa)
- | ( snd(linhamapa !! (y)) !! (x+1) ) == Arvore = True 
- | otherwise= False 
+emArvoreDireita :: Coordenadas -> [LinhaDoMapa]-> Bool
+emArvoreDireita (x,y) linhamapa
+ | ( snd (linhamapa !! y) !! (x+1) ) == Arvore = True
+ | otherwise= False
 
-emArvoreEsquerda :: Coordenadas -> [LinhaDoMapa]-> Bool 
-emArvoreEsquerda (x,y) ( linhamapa)
- | ( snd(linhamapa !! (y)) !! (x-1) ) == Arvore = True 
- | otherwise= False 
+emArvoreEsquerda :: Coordenadas -> [LinhaDoMapa]-> Bool
+emArvoreEsquerda (x,y) linhamapa
+ | ( snd (linhamapa !! y) !! (x-1) ) == Arvore = True
+ | otherwise= False
 
-emArvoreCima :: Coordenadas -> [LinhaDoMapa] -> Bool 
-emArvoreCima (x,y) ( linhamapa)
- | ( snd(linhamapa !! (y-1)) !! x ) == Arvore = True 
- | otherwise= False 
+emArvoreCima :: Coordenadas -> [LinhaDoMapa] -> Bool
+emArvoreCima (x,y) linhamapa
+ | ( snd (linhamapa !! (y-1)) !! x ) == Arvore = True
+ | otherwise= False
 
 emArvoreBaixo :: Coordenadas -> [LinhaDoMapa]-> Bool
-emArvoreBaixo (x,y) ( linhamapa)
- | ( snd(linhamapa !! (y+1)) !! x ) == Arvore = True 
- | otherwise= False 
+emArvoreBaixo (x,y) linhamapa
+ | ( snd (linhamapa !! (y+1)) !! x ) == Arvore = True
+ | otherwise= False
 
 
 {- |A função moveObstaculos é utilizada para , consoante a velocidade de cada Terreno, conseguir alterar a posição dos elementos (possiveis de serem movimentados) ao longo da lista.  
 
-
-
-
 @
 moveObstaculos :: [LinhaDoMapa]-> [LinhaDoMapa]
 moveObstaculos [] = [] 
-moveObstaculos ((Rio k, obstaculos ):t)
-    | k>0 =  (Rio k , rotateRight k (obstaculos)) : moveObstaculos t 
-    | otherwise = (Rio k , rotateLeft  (abs k) (obstaculos)) : moveObstaculos t 
-moveObstaculos ((Estrada  k, obstaculos ):t)
-    |  k>0 =  (Estrada k , rotateRight k (obstaculos)) : moveObstaculos t 
-    | otherwise = (Estrada  k , rotateLeft  (abs k) obstaculos) : moveObstaculos t 
+moveObstaculos ((Rio velocidade, obstaculos ):t)
+    | velocidade>0 =  (Rio velocidade , rotateRight velocidade (obstaculos)) : moveObstaculos t 
+    | otherwise = (Rio velocidade , rotateLeft  (abs velocidade) (obstaculos)) : moveObstaculos t 
+moveObstaculos ((Estrada  velocidade, obstaculos ):t)
+    |  velocidade>0 =  (Estrada velocidade , rotateRight velocidade (obstaculos)) : moveObstaculos t 
+    | otherwise = (Estrada  velocidade , rotateLeft  (abs velocidade) obstaculos) : moveObstaculos t 
 
 moveObstaculos (x:t) = x : moveObstaculos t  
 @
@@ -231,35 +229,26 @@ moveObstaculos (x:t) = x : moveObstaculos t
 >>> moveObstaculos [(Rio 2 , [Nenhum,Tronco,Tronco,Nenhum,Nenhum]), [(Estrada (-1) , [Carro, Nenhum,Carro,Carro,Nenhum])]
 [(Rio 2,[Nenhum,Nenhum,Nenhum,Tronco,Tronco]),(Estrada (-1),[Nenhum,Carro,Carro,Nenhum,Carro])]
 
-
-
-
 -}
 
-moveObstaculos :: [LinhaDoMapa]-> [LinhaDoMapa]
-moveObstaculos [] = [] 
-moveObstaculos ((Rio k, obstaculos ):t)
-    | k>0 =  (Rio k , rotateRight k (obstaculos)) : moveObstaculos t 
-    | otherwise = (Rio k , rotateLeft  (abs k) (obstaculos)) : moveObstaculos t 
-moveObstaculos ((Estrada  k, obstaculos ):t)
-    |  k>0 =  (Estrada k , rotateRight k (obstaculos)) : moveObstaculos t 
-    | otherwise = (Estrada  k , rotateLeft  (abs k) obstaculos) : moveObstaculos t 
+moveObstaculos :: Coordenadas -> Int ->[LinhaDoMapa]-> [LinhaDoMapa]
+moveObstaculos _ _  [] = []
+moveObstaculos pos currentLine ((Rio velocidade, obstaculos) : t)
+    | velocidade > 0 =  (Rio velocidade , rotateRight pos currentLine velocidade obstaculos) : moveObstaculos pos (currentLine + 1) t
+    | otherwise = (Rio velocidade , rotateLeft pos currentLine(abs velocidade) obstaculos) : moveObstaculos pos (currentLine + 1) t
+moveObstaculos pos currentLine ((Estrada  velocidade, obstaculos ):t)
+    |  velocidade>0 =  (Estrada velocidade , rotateRight pos currentLine velocidade obstaculos) : moveObstaculos pos (currentLine + 1) t
+    | otherwise = (Estrada  velocidade , rotateLeft pos currentLine (abs velocidade) obstaculos) : moveObstaculos pos (currentLine + 1) t
 
-moveObstaculos (x:t) = x : moveObstaculos t 
-
+moveObstaculos pos currentLine (h:t) = h : moveObstaculos pos (currentLine + 1) t
 
 {- |A função rotateRight foi criada de modo a auxiliar a função moveObstaculos, de modo a dar "shift" aos elementos da lista n posições para a direita, consoante a velocidade.
 
-
 @
-
-
 rotateRight :: Int->[Obstaculo]-> [Obstaculo]
 rotateRight _  [] = []
 rotateRight 0 obstaculos = obstaculos 
-rotateRight k (x:xs) = rotateRight  (k-1) ([last xs]++[x] ++ init xs)
-
-
+rotateRight velocidade (x:xs) = rotateRight  (velocidade-1) ([last xs]++[x] ++ init xs)
 @
 
 ==Exemplo de utilização 
@@ -267,25 +256,21 @@ rotateRight k (x:xs) = rotateRight  (k-1) ([last xs]++[x] ++ init xs)
 [Nenhum,Nenhum,Carro,Nenhum,Carro,Carro,Nenhum]
 
 -}
-rotateRight :: Int->[Obstaculo]-> [Obstaculo]
-rotateRight _  [] = []
-rotateRight 0 obstaculos = obstaculos 
-rotateRight k (x:xs) = rotateRight  (k-1) ([last xs]++[x] ++ init xs)
+rotateRight :: Coordenadas -> Int -> Int -> [Obstaculo] -> [Obstaculo]
+rotateRight _ _ _ [] = []
+rotateRight _ _ 0 obstaculos = obstaculos
+rotateRight pos@(posX, posY) currentLine velocidade obstaculos 
+  | newObstaculos !! posX == Carro && posY == currentLine = newObstaculos
+  | otherwise = rotateRight pos currentLine (velocidade - 1) newObstaculos
+ where newObstaculos = last obstaculos : init obstaculos
 
 
 {- |A função rotateLeft foi criada de modo a auxiliar a função moveObstaculos, de modo a dar "shift" aos elementos da lista n posições para a esquerda, consoante a velocidade.
 
-
-
 @
-
 rotateLeft _ [] = [] 
 rotateLeft 0 obstaculos = obstaculos
-rotateLeft  k (x:xs) = rotateLeft ( k-1) (xs ++ [x])
-
-
-
-
+rotateLeft  velocidade (x:xs) = rotateLeft ( velocidade-1) (xs ++ [x])
 @
 
 ==Exemplo de utilização 
@@ -293,11 +278,12 @@ rotateLeft  k (x:xs) = rotateLeft ( k-1) (xs ++ [x])
 >>> rotateLeft 2 [Nenhum,Tronco,Nenhum,Nenhum,Tronco,Tronco,Tronco]
 
 [Nenhum,Nenhum,Tronco,Tronco,Nenhum,Tronco]
-
-
 -}
 
-rotateLeft :: Int-> [Obstaculo]-> [Obstaculo]
-rotateLeft _ [] = [] 
-rotateLeft 0 obstaculos = obstaculos
-rotateLeft  k (x:xs) = rotateLeft ( k-1) (xs ++ [x])
+rotateLeft :: Coordenadas -> Int-> Int -> [Obstaculo]-> [Obstaculo]
+rotateLeft _ _ _ [] = []
+rotateLeft _ _ 0 obstaculos = obstaculos
+rotateLeft  pos@(posX, posY) currentLine velocidade obstaculos@(x:xs)  
+ | newObstaculos !! posX == Carro && posY == currentLine = newObstaculos
+ | otherwise = rotateLeft pos currentLine (velocidade - 1) newObstaculos
+  where newObstaculos = xs ++ [x]
