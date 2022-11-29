@@ -5,6 +5,7 @@ import Tarefa1_2022li1g031
 import Tarefa2_2022li1g031
 import Tarefa3_2022li1g031
 import Tarefa4_2022li1g031
+import Tarefa5_2022li1g031
 
 
 main :: IO ()
