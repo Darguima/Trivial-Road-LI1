@@ -26,25 +26,25 @@ alunos, sendo que, no mı́nimo, a aplicação deverá:
 4. Detetar quando o jogador perde e reagir adequadamente, e.g mostrando uma mensagem, reiniciando o jogo, etc.
 -}
 
-type Estado = (Jogo, Texturas)
+type Estado = (Jogo, Texturas, Int)
 type Texturas = [Picture]
 
 tamanhoChunk :: Float
 tamanhoChunk = 100
 
-xInicial:: Float
-xInicial = -400
+getInitialX :: Int -> Float
+getInitialX quantidadeChunks = - (fromIntegral quantidadeChunks * tamanhoChunk) / 2
 
-yInicial:: Float
-yInicial =  540 - (tamanhoChunk / 2)
+getInitialY :: Int -> Float
+getInitialY alturaWindow = (fromIntegral alturaWindow / 2) - (tamanhoChunk / 2)
 
 mapaInicial = Mapa 8 [(Rio 5, [Nenhum, Tronco, Nenhum,Nenhum,Nenhum,Nenhum,Tronco,Tronco]), (Estrada 2 , [Nenhum,Carro,Nenhum,Carro,Carro,Nenhum,Carro,Carro]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Nenhum,Nenhum,Carro]), (Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]),(Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum])] 
 
-estadoInicial :: Texturas->Estado
-estadoInicial texturas = (Jogo (Jogador (0, 0)) mapaInicial, texturas)
+estadoInicial :: Texturas -> Int -> Estado
+estadoInicial texturas alturaWindow = (Jogo (Jogador (0, 0)) mapaInicial, texturas, alturaWindow )
 
 desenharNovoEstado :: Estado -> IO Picture
-desenharNovoEstado (Jogo _ mapa, texturas) = return $ Pictures $ desenharMapa mapa texturas xInicial yInicial
+desenharNovoEstado (Jogo _ mapa@(Mapa larguraMapa _), texturas, alturaWindow) = return $ Pictures $ desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY alturaWindow)
 
   where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
   
@@ -57,7 +57,7 @@ desenharNovoEstado (Jogo _ mapa, texturas) = return $ Pictures $ desenharMapa ma
         desenharLinha (terreno, chunkAtual : otherChunks) posX posY textures
           = desenharChunk terreno chunkAtual posX posY textures :  desenharLinha (terreno, otherChunks) (posX + tamanhoChunk) posY textures
 
-        desenharLinha (_, []) _ _ _ = [] 
+        desenharLinha (_, []) _ _ _ = []
 
         desenharChunk :: Terreno -> Obstaculo -> Float -> Float -> Texturas -> Picture
         desenharChunk (Rio _) Nenhum posX posY texturas = Translate posX posY (texturas !! 0)
@@ -87,13 +87,14 @@ play = do rio <- loadBMP "src/images/rio.bmp"
           arvore <- loadBMP "src/images/arvore.bmp"
           estrada <- loadBMP "src/images/estrada.bmp"
           carro <- loadBMP "src/images/carro.bmp"
-
+          (_, alturaWindow) <- getScreenSize 
+        
           let mapImages = [rio, tronco, relva, arvore, estrada, carro]
 
           playIO dm
             black
             fr
-            (estadoInicial mapImages)
+            (estadoInicial mapImages alturaWindow)
             desenharNovoEstado
             reageEvento
             reageTempo
