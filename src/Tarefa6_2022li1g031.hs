@@ -11,6 +11,7 @@ import LI12223
 import System.Random
 import Graphics.Gloss 
 import Graphics.Gloss.Interface.IO.Game
+import Graphics.Gloss.Interface.Environment
 {-|
 O objetivo desta tarefa consiste em aproveitar todas as funcionalidades já
 elaboradas nas outras Tarefas e construir uma aplicação gráfica que permita
@@ -28,11 +29,14 @@ alunos, sendo que, no mı́nimo, a aplicação deverá:
 type State = (Jogo,Texturas)
 type Texturas = [Picture]
 
+chunkSize :: Float
+chunkSize = 100
+
 initialX:: Float
 initialX = -400
 
 initialY:: Float
-initialY =  540
+initialY =  540 - (chunkSize / 2)
 
 initialMap = Mapa 8 [(Rio 5, [Nenhum, Tronco, Nenhum,Nenhum,Nenhum,Nenhum,Tronco,Tronco]), (Estrada 2 , [Nenhum,Carro,Nenhum,Carro,Carro,Nenhum,Carro,Carro]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Nenhum,Nenhum,Carro]), (Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]),(Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum])] 
 
@@ -44,24 +48,24 @@ drawNewState (Jogo _ map, textures) = return $ Pictures $ drawMap map textures i
 
   where drawMap :: Mapa -> Texturas -> Float -> Float -> [Picture]
   
-        drawMap (Mapa l ((_, chunks) : otherLines)) textures initialX initialY = 
-          drawLines chunks initialX initialY textures ++ drawMap (Mapa l otherLines) textures initialX (initialY - 100)
+        drawMap (Mapa l (currentLine : otherLines)) textures initialX initialY = 
+          drawLines currentLine initialX initialY textures ++ drawMap (Mapa l otherLines) textures initialX (initialY - chunkSize)
 
         drawMap _ _ _ _ = []
 
-        drawLines :: [Obstaculo] -> Float -> Float -> Texturas -> [Picture]
-        drawLines (currentChunk : otherChunks) posX posY textureList
-          = drawChunk currentChunk posX posY textureList :  drawLines otherChunks (posX + 100) posY textureList
+        drawLines :: LinhaDoMapa -> Float -> Float -> Texturas -> [Picture]
+        drawLines (biome, currentChunk : otherChunks) posX posY textureList
+          = drawChunk biome currentChunk posX posY textureList :  drawLines (biome, otherChunks) (posX + chunkSize) posY textureList
 
-        drawLines [] _ _ _ = [] 
+        drawLines (_, []) _ _ _ = [] 
 
-        drawChunk :: Obstaculo -> Float -> Float -> Texturas -> Picture
-        drawChunk Nenhum posX posY textures = Translate posX posY (textures !! 0)
-        drawChunk Tronco posX posY textures = Translate posX posY (textures !! 1)
-        -- drawChunk Nenhum posX posY textures = Translate posX posY (textures !! 2)
-        drawChunk Arvore posX posY textures = Translate posX posY (textures !! 3)
-        -- drawChunk Nenhum posX posY textures = Translate posX posY (textures !! 4)
-        drawChunk Carro posX posY textures = Translate posX posY (textures !! 5)
+        drawChunk :: Terreno -> Obstaculo -> Float -> Float -> Texturas -> Picture
+        drawChunk (Rio _) Nenhum posX posY textures = Translate posX posY (textures !! 0)
+        drawChunk (Rio _) Tronco posX posY textures = Translate posX posY (textures !! 1)
+        drawChunk Relva Nenhum posX posY textures = Translate posX posY (textures !! 2)
+        drawChunk Relva Arvore posX posY textures = Translate posX posY (textures !! 3)
+        drawChunk (Estrada _) Nenhum posX posY textures = Translate posX posY (textures !! 4)
+        drawChunk (Estrada _) Carro posX posY textures = Translate posX posY (textures !! 5)
 
 
 reactEvent :: Event -> State -> IO State
