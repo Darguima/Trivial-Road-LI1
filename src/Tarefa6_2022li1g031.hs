@@ -26,53 +26,53 @@ alunos, sendo que, no mı́nimo, a aplicação deverá:
 4. Detetar quando o jogador perde e reagir adequadamente, e.g mostrando uma mensagem, reiniciando o jogo, etc.
 -}
 
-type State = (Jogo,Texturas)
+type Estado = (Jogo, Texturas)
 type Texturas = [Picture]
 
-chunkSize :: Float
-chunkSize = 100
+tamanhoChunk :: Float
+tamanhoChunk = 100
 
-initialX:: Float
-initialX = -400
+xInicial:: Float
+xInicial = -400
 
-initialY:: Float
-initialY =  540 - (chunkSize / 2)
+yInicial:: Float
+yInicial =  540 - (tamanhoChunk / 2)
 
-initialMap = Mapa 8 [(Rio 5, [Nenhum, Tronco, Nenhum,Nenhum,Nenhum,Nenhum,Tronco,Tronco]), (Estrada 2 , [Nenhum,Carro,Nenhum,Carro,Carro,Nenhum,Carro,Carro]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Nenhum,Nenhum,Carro]), (Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]),(Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum])] 
+mapaInicial = Mapa 8 [(Rio 5, [Nenhum, Tronco, Nenhum,Nenhum,Nenhum,Nenhum,Tronco,Tronco]), (Estrada 2 , [Nenhum,Carro,Nenhum,Carro,Carro,Nenhum,Carro,Carro]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Nenhum,Nenhum,Carro]), (Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]),(Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum])] 
 
-initialState :: Texturas->State
-initialState textures = (Jogo (Jogador (0, 0)) initialMap, textures)
+estadoInicial :: Texturas->Estado
+estadoInicial texturas = (Jogo (Jogador (0, 0)) mapaInicial, texturas)
 
-drawNewState :: State -> IO Picture
-drawNewState (Jogo _ map, textures) = return $ Pictures $ drawMap map textures initialX initialY
+desenharNovoEstado :: Estado -> IO Picture
+desenharNovoEstado (Jogo _ mapa, texturas) = return $ Pictures $ desenharMapa mapa texturas xInicial yInicial
 
-  where drawMap :: Mapa -> Texturas -> Float -> Float -> [Picture]
+  where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
   
-        drawMap (Mapa l (currentLine : otherLines)) textures initialX initialY = 
-          drawLines currentLine initialX initialY textures ++ drawMap (Mapa l otherLines) textures initialX (initialY - chunkSize)
+        desenharMapa (Mapa l (linhaAtual : outrasLinhas)) texturas xInicial yInicial = 
+          desenharLinha linhaAtual xInicial yInicial texturas ++ desenharMapa (Mapa l outrasLinhas) texturas xInicial (yInicial - tamanhoChunk)
 
-        drawMap _ _ _ _ = []
+        desenharMapa _ _ _ _ = []
 
-        drawLines :: LinhaDoMapa -> Float -> Float -> Texturas -> [Picture]
-        drawLines (biome, currentChunk : otherChunks) posX posY textureList
-          = drawChunk biome currentChunk posX posY textureList :  drawLines (biome, otherChunks) (posX + chunkSize) posY textureList
+        desenharLinha :: LinhaDoMapa -> Float -> Float -> Texturas -> [Picture]
+        desenharLinha (terreno, chunkAtual : otherChunks) posX posY textures
+          = desenharChunk terreno chunkAtual posX posY textures :  desenharLinha (terreno, otherChunks) (posX + tamanhoChunk) posY textures
 
-        drawLines (_, []) _ _ _ = [] 
+        desenharLinha (_, []) _ _ _ = [] 
 
-        drawChunk :: Terreno -> Obstaculo -> Float -> Float -> Texturas -> Picture
-        drawChunk (Rio _) Nenhum posX posY textures = Translate posX posY (textures !! 0)
-        drawChunk (Rio _) Tronco posX posY textures = Translate posX posY (textures !! 1)
-        drawChunk Relva Nenhum posX posY textures = Translate posX posY (textures !! 2)
-        drawChunk Relva Arvore posX posY textures = Translate posX posY (textures !! 3)
-        drawChunk (Estrada _) Nenhum posX posY textures = Translate posX posY (textures !! 4)
-        drawChunk (Estrada _) Carro posX posY textures = Translate posX posY (textures !! 5)
+        desenharChunk :: Terreno -> Obstaculo -> Float -> Float -> Texturas -> Picture
+        desenharChunk (Rio _) Nenhum posX posY texturas = Translate posX posY (texturas !! 0)
+        desenharChunk (Rio _) Tronco posX posY texturas = Translate posX posY (texturas !! 1)
+        desenharChunk Relva Nenhum posX posY texturas = Translate posX posY (texturas !! 2)
+        desenharChunk Relva Arvore posX posY texturas = Translate posX posY (texturas !! 3)
+        desenharChunk (Estrada _) Nenhum posX posY texturas = Translate posX posY (texturas !! 4)
+        desenharChunk (Estrada _) Carro posX posY texturas = Translate posX posY (texturas !! 5)
 
 
-reactEvent :: Event -> State -> IO State
-reactEvent _ = return
+reageEvento :: Event -> Estado -> IO Estado
+reageEvento _ = return
 
-reactTime :: Float -> State -> IO State
-reactTime _ = return
+reageTempo :: Float -> Estado -> IO Estado
+reageTempo _ = return
 
 fr :: Int
 fr = 50
@@ -81,19 +81,19 @@ dm :: Display
 dm = FullScreen  
 
 play :: IO ()
-play = do water <- loadBMP "src/images/water.bmp"
-          trunk <- loadBMP "src/images/trunk.bmp"
-          grass <- loadBMP "src/images/grass.bmp"
-          tree <- loadBMP "src/images/tree.bmp"
-          road <- loadBMP "src/images/road.bmp"
-          car <- loadBMP "src/images/car.bmp"
+play = do rio <- loadBMP "src/images/rio.bmp"
+          tronco <- loadBMP "src/images/tronco.bmp"
+          relva <- loadBMP "src/images/relva.bmp"
+          arvore <- loadBMP "src/images/arvore.bmp"
+          estrada <- loadBMP "src/images/estrada.bmp"
+          carro <- loadBMP "src/images/carro.bmp"
 
-          let mapImages = [water, trunk, grass, tree, road, car]
+          let mapImages = [rio, tronco, relva, arvore, estrada, carro]
 
           playIO dm
             black
             fr
-            (initialState mapImages)
-            drawNewState
-            reactEvent
-            reactTime
+            (estadoInicial mapImages)
+            desenharNovoEstado
+            reageEvento
+            reageTempo
