@@ -10,6 +10,7 @@ module Tarefa2_2022li1g031 where
 
 import LI12223
 import Tarefa1_2022li1g031 (checkarTamanhoObstaculosLinha)
+import System.Random
 
 
 {- |A função estendeMapa usa duas outras funções auxiliares:
@@ -31,6 +32,12 @@ Mapa 5 [(Relva,[Arvore,Arvore,Arvore,Arvore,Nenhum])]
 
 -}
 
+
+type Comprimento = Int
+type Semente = Int
+geraListaAleatorios :: Semente -> Comprimento -> [Int]
+geraListaAleatorios s c = take c $ randoms (mkStdGen s)
+
 estendeMapa :: Mapa -> Int -> Mapa
 estendeMapa (Mapa largura linhas) seed = correctMap ( Mapa largura ((novoTerreno, novaLinha) : linhas) ) seed
 
@@ -38,19 +45,20 @@ estendeMapa (Mapa largura linhas) seed = correctMap ( Mapa largura ((novoTerreno
         novaLinha = gerarObstaculos largura (novoTerreno, []) seed
 
         randomChoice :: [a] -> Int -> a
-        randomChoice options seed = options !! mod seed (length options)
+        randomChoice options randomNumber = options !! mod randomNumber (length options)
 
         gerarObstaculos :: Int -> LinhaDoMapa -> Int -> [Obstaculo]
         gerarObstaculos largura (terreno, obstaculosAtuais) seed
           | null novoObstaculo = obstaculosAtuais
-          | otherwise = gerarObstaculos largura ( terreno, obstaculosAtuais ++ novoObstaculo) seed
-          where novoObstaculo = proximoObstaculo largura (terreno, obstaculosAtuais) seed
+          | otherwise = gerarObstaculos largura ( terreno, obstaculosAtuais ++ novoObstaculo) (abs ( last randomNumbers))
+          where novoObstaculo = proximoObstaculo largura (terreno, obstaculosAtuais) (abs (head randomNumbers))
+                randomNumbers = geraListaAleatorios seed 2
 
 
         proximoObstaculo :: Int -> LinhaDoMapa -> Int -> [Obstaculo]
-        proximoObstaculo largura linhaDoMapa seed
+        proximoObstaculo largura linhaDoMapa randomNumber
           | null options = []
-          | otherwise = [randomChoice options seed]
+          | otherwise = [randomChoice options randomNumber]
           where options = proximosObstaculosValidos largura linhaDoMapa
         
         correctMap :: Mapa -> Int -> Mapa

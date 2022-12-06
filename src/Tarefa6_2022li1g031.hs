@@ -12,6 +12,8 @@ import System.Random
 import Graphics.Gloss 
 import Graphics.Gloss.Interface.IO.Game
 import Graphics.Gloss.Interface.Environment
+import Tarefa5_2022li1g031 (deslizaJogo)
+import Tarefa3_2022li1g031 (animaJogo)
 {-|
 O objetivo desta tarefa consiste em aproveitar todas as funcionalidades já
 elaboradas nas outras Tarefas e construir uma aplicação gráfica que permita
@@ -44,7 +46,7 @@ estadoInicial :: Texturas -> Int -> Estado
 estadoInicial texturas alturaWindow = (Jogo (Jogador (0, 0)) mapaInicial, texturas, alturaWindow )
 
 desenharNovoEstado :: Estado -> IO Picture
-desenharNovoEstado (Jogo _ mapa@(Mapa larguraMapa _), texturas, alturaWindow) = return $ Pictures $ desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY alturaWindow)
+desenharNovoEstado (Jogo (Jogador (posX, posY)) mapa@(Mapa larguraMapa _), texturas, alturaWindow) = return $ Pictures $ desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY alturaWindow) 
 
   where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
   
@@ -67,15 +69,19 @@ desenharNovoEstado (Jogo _ mapa@(Mapa larguraMapa _), texturas, alturaWindow) = 
         desenharChunk (Estrada _) Nenhum posX posY texturas = Translate posX posY (texturas !! 4)
         desenharChunk (Estrada _) Carro posX posY texturas = Translate posX posY (texturas !! 5)
 
+      
+         
 
 reageEvento :: Event -> Estado -> IO Estado
 reageEvento _ = return
 
 reageTempo :: Float -> Estado -> IO Estado
-reageTempo _ = return
+reageTempo _ (jogo, texturas, alturaWindow) = do
+  novoJogo <- deslizaJogo $ animaJogo jogo (Move Cima)
+  return (jogo, texturas, alturaWindow)
 
 fr :: Int
-fr = 50
+fr = 1
 
 dm :: Display
 dm = FullScreen  
