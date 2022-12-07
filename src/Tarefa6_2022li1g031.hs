@@ -35,7 +35,7 @@ tamanhoChunk :: Float
 tamanhoChunk = 100
 
 getInitialX :: Int -> Float
-getInitialX quantidadeChunks = - (fromIntegral quantidadeChunks * tamanhoChunk) / 2
+getInitialX larguraMapa = - (fromIntegral larguraMapa * tamanhoChunk) / 2 +  (tamanhoChunk / 2)
 
 getInitialY :: Int -> Float
 getInitialY alturaWindow = (fromIntegral alturaWindow / 2) - (tamanhoChunk / 2)
@@ -46,7 +46,8 @@ estadoInicial :: Texturas -> Int -> Estado
 estadoInicial texturas alturaWindow = (Jogo (Jogador (0, 0)) mapaInicial, texturas, alturaWindow )
 
 desenharNovoEstado :: Estado -> IO Picture
-desenharNovoEstado (Jogo (Jogador (posX, posY)) mapa@(Mapa larguraMapa _), texturas, alturaWindow) = return $ Pictures $ desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY alturaWindow) 
+desenharNovoEstado (Jogo (Jogador (posX, posY)) mapa@(Mapa larguraMapa _), texturas, alturaWindow) = do
+  return $ Pictures $ desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY alturaWindow) ++ [desenharPlayer posX posY larguraMapa alturaWindow]
 
   where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
   
@@ -69,8 +70,10 @@ desenharNovoEstado (Jogo (Jogador (posX, posY)) mapa@(Mapa larguraMapa _), textu
         desenharChunk (Estrada _) Nenhum posX posY texturas = Translate posX posY (texturas !! 4)
         desenharChunk (Estrada _) Carro posX posY texturas = Translate posX posY (texturas !! 5)
 
-      
-         
+        desenharPlayer :: Int -> Int -> Int -> Int -> Picture
+        desenharPlayer posXJogador posYJogador larguraMapa alturaWindow = Translate posX posY $ color yellow $ circle 20
+          where posX = getInitialX larguraMapa + fromIntegral posXJogador * tamanhoChunk
+                posY = getInitialY alturaWindow - fromIntegral posYJogador * tamanhoChunk
 
 reageEvento :: Event -> Estado -> IO Estado
 reageEvento _ = return
@@ -78,7 +81,7 @@ reageEvento _ = return
 reageTempo :: Float -> Estado -> IO Estado
 reageTempo _ (jogo, texturas, alturaWindow) = do
   novoJogo <- deslizaJogo $ animaJogo jogo (Move Cima)
-  return (jogo, texturas, alturaWindow)
+  return (novoJogo, texturas, alturaWindow)
 
 fr :: Int
 fr = 1

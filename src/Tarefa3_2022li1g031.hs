@@ -9,7 +9,6 @@ Módulo para a realização da Tarefa 3 do projeto de LI1 em 2022/23.
 module Tarefa3_2022li1g031 where
 
 import LI12223
-import qualified GHC.Base as Tronco
 
 {- |A função estendeMapa usa duas outras funções auxiliares:
   * proximosTerrenosValidos
