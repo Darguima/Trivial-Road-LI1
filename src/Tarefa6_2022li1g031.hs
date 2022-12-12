@@ -13,7 +13,7 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
 import Graphics.Gloss.Interface.Environment
 import Tarefa5_2022li1g031 (deslizaJogo)
-import Tarefa3_2022li1g031 (animaJogo)
+import Tarefa3_2022li1g031 (animaJogador, animaMapa)
 import Tarefa4_2022li1g031 (jogoTerminou)
 {-|
 O objetivo desta tarefa consiste em aproveitar todas as funcionalidades já
@@ -37,26 +37,32 @@ type Texturas = [Picture]
 tamanhoChunk :: Float
 tamanhoChunk = 100
 
+fr :: Int
+fr = 1
+
+dm :: Display
+dm = FullScreen
+
+estadoInicial :: Texturas -> Int -> Estado
+estadoInicial texturas alturaWindow = (Jogo (Jogador getPosInicial) mapaInicial, texturas, alturaWindow, JOGO )
+  where getPosInicial :: Coordenadas
+        getPosInicial = getPosInicial_ mapaInicial
+          where getPosInicial_ :: Mapa -> (Int, Int)
+                getPosInicial_ (Mapa largura linhasMap@((_, linhaMapa) : _)) = (div (length linhaMapa) 2, length linhasMap - 4)
+
 getInitialX :: Int -> Float
 getInitialX larguraMapa = - (fromIntegral larguraMapa * tamanhoChunk) / 2 +  (tamanhoChunk / 2)
 
 getInitialY :: Int -> Float
 getInitialY alturaWindow = (fromIntegral alturaWindow / 2) - (tamanhoChunk / 2)
 
-mapaInicial = Mapa 8 [(Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Estrada 1, [Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]),(Rio 2 , [Nenhum,Tronco,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Arvore,Nenhum,Nenhum,Nenhum]), (Estrada 2 , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Arvore,Nenhum,Nenhum,Nenhum, Nenhum, Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Arvore,Nenhum,Nenhum,Nenhum, Nenhum, Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum])] 
-
-getPosInicial :: Coordenadas
-getPosInicial = getPosInicial_ mapaInicial
-  where getPosInicial_ :: Mapa -> (Int, Int)
-        getPosInicial_ (Mapa largura linhasMap@((_, linhaMapa) : _)) = (div (length linhaMapa) 2, length linhasMap - 4)
-
-
-estadoInicial :: Texturas -> Int -> Estado
-estadoInicial texturas alturaWindow = (Jogo (Jogador getPosInicial) mapaInicial, texturas, alturaWindow, JOGO )
+mapaInicial = Mapa 8 [(Estrada (-3), [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]), (Rio 1, [Tronco,Nenhum,Nenhum,Tronco,Tronco,Nenhum,Nenhum,Nenhum]),(Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]), (Estrada (-2) , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Estrada (-1) , [Nenhum,Carro,Nenhum,Nenhum,Carro,Carro,Nenhum,Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Arvore,Arvore,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum, Arvore]), (Relva , [Arvore,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Arvore])] 
 
 desenharNovoEstado :: Estado -> IO Picture
 desenharNovoEstado (Jogo (Jogador (posX, posY)) mapa@(Mapa larguraMapa _), texturas, alturaWindow, JOGO) = do
-  return $ Pictures $ desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY alturaWindow) ++ [desenharPlayer posX posY larguraMapa alturaWindow]
+  return $ Pictures $ 
+    desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY alturaWindow)
+    ++ [desenharPlayer posX posY larguraMapa alturaWindow]
 
   where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
   
@@ -88,26 +94,34 @@ desenharNovoEstado (jogo, texturas, alturaWindow, DERROTA) = return $ color red 
 desenharNovoEstado (jogo, texturas, alturaWindow, _) = return $ color green $ circle 20
 
 reageEvento :: Event -> Estado -> IO Estado
-reageEvento _ = return
+
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) estado = return $ moverJogador estado (Move Cima)
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) estado = return $ moverJogador estado (Move Baixo)
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) estado = return $ moverJogador estado (Move Esquerda)
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) estado = return $ moverJogador estado (Move Direita)
+
+reageEvento (EventKey (SpecialKey KeySpace) Down _ _) (jogo, texturas, alturaWindow, JOGO) = do 
+  newGame <- deslizaJogo jogo
+  return (newGame, texturas, alturaWindow, JOGO)
+
+reageEvento _ estado = return estado
+
+moverJogador :: Estado -> Jogada -> Estado 
+moverJogador (jogo, texturas, alturaWindow, JOGO) jogada = (novoJogo, texturas, alturaWindow, novoMenu)
+  where novoJogo = animaJogador jogo jogada
+        novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO;
 
 reageTempo :: Float -> Estado -> IO Estado
-
 reageTempo _ (jogo, texturas, alturaWindow, DERROTA) = do
   return (jogo, texturas, alturaWindow, DERROTA)
 
 reageTempo _ (jogo, texturas, alturaWindow, JOGO) = do
-  novoJogo <- deslizaJogo $ animaJogo jogo (Move Cima)
+  let novoJogo = animaMapa jogo
   let novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO
-  return (jogo, texturas, alturaWindow, novoMenu)
+  return (novoJogo, texturas, alturaWindow, novoMenu)
 
 reageTempo _ (jogo, texturas, alturaWindow, menuAtual) = do
   return (jogo, texturas, alturaWindow, menuAtual)
-
-fr :: Int
-fr = 1
-
-dm :: Display
-dm = FullScreen  
 
 play :: IO ()
 play = do rio <- loadBMP "src/images/rio.bmp"
