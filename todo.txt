@@ -1,4 +1,3 @@
-Menu com botao "jogar", "sobre", "sair"
 saber o numero de linhas possiveis para limitar o y e poder renderizar a partir de baixo 
 carregar pontuacoes e a largura de um ficheiro
 gerar o jogo sempre aleatoriamente, com a largura gravada em ficheiro
