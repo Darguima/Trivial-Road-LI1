@@ -1,7 +1,5 @@
-separar animajogo em 2 (animaJogador, animaMapa)
-corrigir jogdor nos troncos
-corrigir derrotas (o jogador consegue entrar dentro do carro)
+separar tudo em módulos
+Menu com botao "jogar", "sobre", "sair"
 saber o numero de linhas possiveis para limitar o y e poder renderizar a partir de baixo 
-renderizar o mapa de baixo para cim
-alterar tarefa 5 para deixar de ser IO
-merge branches
+passar largura para o jogo para ser dinamico
+gerar o jogo sempre aleatoriamente

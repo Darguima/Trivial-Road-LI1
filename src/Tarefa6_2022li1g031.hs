@@ -101,7 +101,8 @@ reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) estado = return $ moverJoga
 reageEvento (EventKey (SpecialKey KeyRight) Down _ _) estado = return $ moverJogador estado (Move Direita)
 
 reageEvento (EventKey (SpecialKey KeySpace) Down _ _) (jogo, texturas, alturaWindow, JOGO) = do 
-  newGame <- deslizaJogo jogo
+  randomNumber <- randomRIO (1, 100)
+  let newGame = deslizaJogo randomNumber jogo
   return (newGame, texturas, alturaWindow, JOGO)
 
 reageEvento _ estado = return estado

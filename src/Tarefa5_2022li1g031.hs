@@ -22,10 +22,7 @@ concretamente:
 2. A coordenada y do jogador deve ser aumentada (em 1 unidade), reflectindo assim o efeito de que o jogador “ficou para trás”.
 -}
 
-deslizaJogo :: Jogo -> IO Jogo
-deslizaJogo currentGame@(Jogo (Jogador (posX, posY)) mapa) = do
-  randomNumber <- randomRIO (1, 100)
-  let (Mapa l linhasDoMapa) = estendeMapa mapa randomNumber
-  
-  return $ Jogo (Jogador (posX, posY + 1)) (Mapa l (init linhasDoMapa))
-        
+deslizaJogo :: Int -> Jogo -> Jogo
+deslizaJogo randomNumber currentGame@(Jogo (Jogador (posX, posY)) mapa) = 
+ let (Mapa l linhasDoMapa) = estendeMapa mapa randomNumber
+ in Jogo (Jogador (posX, posY + 1)) (Mapa l (init linhasDoMapa))
