@@ -2,15 +2,15 @@ module Gloss_Functions.DesenhaEstado where
 
 import LI12223 ( Jogo(Jogo),Jogador(Jogador),Mapa(..),LinhaDoMapa,Obstaculo(..),Terreno(..) )
 
-import Gloss_Functions.GlossData( Texturas, Estado, MenuAtual(DERROTA, JOGO), tamanhoChunk, getInitialX, getInitialY )
+import Gloss_Functions.GlossData( Texturas, Estado, PaginaAtual(DERROTA, JOGO), tamanhoChunk, getInitialX, getInitialY )
 
 import Graphics.Gloss ( Picture(Pictures, Translate), green, red, yellow, circle, color )
 
 desenharNovoEstado :: Estado -> IO Picture
-desenharNovoEstado (Jogo (Jogador (posX, posY)) mapa@(Mapa larguraMapa _), texturas, alturaWindow, JOGO) = do
+desenharNovoEstado (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa) = do
   return $ Pictures $ 
-    desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY alturaWindow)
-    ++ [desenharPlayer posX posY larguraMapa alturaWindow]
+    desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY $ snd tamanhoJanela)
+    ++ [desenharPlayer posX posY larguraMapa $ snd tamanhoJanela]
 
   where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
   
@@ -34,9 +34,9 @@ desenharNovoEstado (Jogo (Jogador (posX, posY)) mapa@(Mapa larguraMapa _), textu
         desenharChunk (Estrada _) Carro posX posY texturas = Translate posX posY (texturas !! 5)
 
         desenharPlayer :: Int -> Int -> Int -> Int -> Picture
-        desenharPlayer posXJogador posYJogador larguraMapa alturaWindow = Translate posX posY $ color yellow $ circle 20
+        desenharPlayer posXJogador posYJogador larguraMapa tamanhoJanela = Translate posX posY $ color yellow $ circle 20
           where posX = getInitialX larguraMapa + fromIntegral posXJogador * tamanhoChunk
-                posY = getInitialY alturaWindow - fromIntegral posYJogador * tamanhoChunk
+                posY = getInitialY tamanhoJanela - fromIntegral posYJogador * tamanhoChunk
 
-desenharNovoEstado (jogo, texturas, alturaWindow, DERROTA) = return $ color red $ circle 20
-desenharNovoEstado (jogo, texturas, alturaWindow, _) = return $ color green $ circle 20
+desenharNovoEstado (jogo, texturas, tamanhoJanela, DERROTA, pontuacaoAtual, pontuacoes, larguraMapa) = return $ color red $ circle 20
+desenharNovoEstado (jogo, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa) = return $ color green $ circle 20
