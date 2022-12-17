@@ -5,7 +5,7 @@ import Gloss_Functions.GlossData( Texturas, Estado, PaginaAtual(DERROTA, JOGO), 
 import Graphics.Gloss ( Picture(Pictures, Translate), green, red, yellow, circle, color )
 
 desenhaEstadoJogo :: Estado -> IO Picture
-desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa) = do
+desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
   return $ Pictures $ 
     desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY $ snd tamanhoJanela)
     ++ [desenharPlayer posX posY larguraMapa $ snd tamanhoJanela]

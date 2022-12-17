@@ -12,7 +12,7 @@ import System.Random ( randomRIO )
 
 moverJogador :: Estado -> Jogada -> Estado 
 
-moverJogador (jogo, texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa)
+moverJogador (jogo, texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual)
   where novoJogo = animaJogador jogo jogada
         novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO;
 
@@ -23,9 +23,9 @@ reageEventoJogo (EventKey (SpecialKey KeyDown) Down _ _) estado = return $ mover
 reageEventoJogo (EventKey (SpecialKey KeyLeft) Down _ _) estado = return $ moverJogador estado (Move Esquerda)
 reageEventoJogo (EventKey (SpecialKey KeyRight) Down _ _) estado = return $ moverJogador estado (Move Direita)
 
-reageEventoJogo (EventKey (SpecialKey KeySpace) Down _ _) (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa) = do 
+reageEventoJogo (EventKey (SpecialKey KeySpace) Down _ _) (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do 
   randomNumber <- randomRIO (1, 100)
   let newGame = deslizaJogo randomNumber jogo
-  return (newGame, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa)
+  return (newGame, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual)
 
 reageEventoJogo _ estado = return estado
