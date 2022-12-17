@@ -33,6 +33,6 @@ desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _,
           where angle = if vel > 0 then 0 else 180
 
         desenharPlayer :: Int -> Int -> Int -> Int -> Picture
-        desenharPlayer posXJogador posYJogador larguraMapa tamanhoJanela = Translate posX posY $ color yellow $ circle 20
+        desenharPlayer posXJogador posYJogador larguraMapa tamanhoJanela = Translate posX posY $ color yellow $ texturas !! 6
           where posX = getInitialX larguraMapa + fromIntegral posXJogador * tamanhoChunk
                 posY = getInitialY tamanhoJanela - fromIntegral posYJogador * tamanhoChunk
