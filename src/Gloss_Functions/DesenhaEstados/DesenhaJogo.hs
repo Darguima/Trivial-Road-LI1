@@ -1,5 +1,6 @@
 module Gloss_Functions.DesenhaEstados.DesenhaJogo where
 
+import Data.List (group)
 import LI12223 ( Jogo(Jogo),Jogador(Jogador),Mapa(..),LinhaDoMapa,Obstaculo(..),Terreno(..) )
 import Gloss_Functions.GlossData( Texturas, Estado, PaginaAtual(DERROTA, JOGO), tamanhoChunk, getInitialX, getInitialY )
 import Graphics.Gloss ( Picture(Pictures, Translate, Rotate), green, red, yellow, circle, color )
@@ -18,19 +19,71 @@ desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _,
         desenharMapa _ _ _ _ = []
 
         desenharLinha :: LinhaDoMapa -> Float -> Float -> Texturas -> [Picture]
-        desenharLinha (terreno, chunkAtual : otherChunks) posX posY textures
-          = desenharChunk terreno chunkAtual posX posY textures :  desenharLinha (terreno, otherChunks) (posX + tamanhoChunk) posY textures
-
         desenharLinha (_, []) _ _ _ = []
+        desenharLinha (Estrada v, listaObjetos@(chunkAtual:otherChunks) ) posX posY textures
+         | take3Cars listaObjetos  = desenhar3Chunk (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v, drop 3 listaObjetos) (posX + 3*tamanhoChunk) posY textures
+         | take2CarsL listaObjetos  && v> 0  = desenhar2ChunkL (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v,  init $ drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures  ++ [Translate (350) (posY) $ texturas !! 10]
+         | take2CarsL listaObjetos  && v< 0 = desenhar2ChunkL (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v,  init $ drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures  ++ [Translate (350) (posY) $ texturas !! 7]
+         | take2CarsR listaObjetos && v > 0 =[Translate (posX) (posY) $ texturas !! 12]  ++ desenharLinha' (Estrada v,  drop 1 $ reverse.drop 2.reverse $ listaObjetos) (posX + tamanhoChunk) posY textures  ++ desenhar2ChunkR (Estrada v) (250) posY textures
+         | take2CarsR listaObjetos && v < 0 =[Translate (posX) (posY) $ texturas !! 9]  ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 2.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures  ++ desenhar2ChunkR (Estrada v) (250) posY textures
+         | otherwise = desenharChunk (Estrada v) chunkAtual posX posY textures :  desenharLinha' ( Estrada v, otherChunks) (posX + tamanhoChunk) posY textures              
+        desenharLinha (terreno, chunkAtual : otherChunks) posX posY textures =  desenharChunk terreno chunkAtual posX posY textures :  desenharLinha' (terreno, otherChunks) (posX + tamanhoChunk) posY textures            
+        
+        desenharLinha' :: LinhaDoMapa -> Float -> Float -> Texturas -> [Picture]
+        desenharLinha' (Estrada v, listaObjetos@(chunkAtual:otherChunks) ) posX posY textures
+         | take3Cars listaObjetos  = desenhar3Chunk (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v, drop 3 listaObjetos) (posX + 3*tamanhoChunk) posY textures
+         | otherwise = desenharChunk (Estrada v) chunkAtual posX posY textures :  desenharLinha' ( Estrada v, otherChunks) (posX + tamanhoChunk) posY textures
+        desenharLinha' (_, []) _ _ _ = []
+        desenharLinha' (terreno, chunkAtual : otherChunks) posX posY textures = desenharChunk terreno chunkAtual posX posY textures :  desenharLinha' (terreno, otherChunks) (posX + tamanhoChunk) posY textures 
+--7   8 9  
+        
+        
+        take2CarsR ::  [Obstaculo] -> Bool 
+        take2CarsR [] = False 
+        take2CarsR lista 
+         | length lista <=2 = False
+         | otherwise = all (==Carro) (drop 6 lista) && (head lista == Carro)    
+--a     b c 
+--12   10 11
+--a b      c
+        take2CarsL ::  [Obstaculo] -> Bool 
+        take2CarsL [] = False 
+        take2CarsL lista 
+         | length lista <=2 = False
+         | otherwise = all (==Carro) (take 2 lista) && (last lista == Carro)
+      
+        take3Cars ::  [Obstaculo] -> Bool 
+        take3Cars [] = False 
+        take3Cars lista 
+         | length lista <3 = False
+         | otherwise = all (==Carro) (take 3 lista) 
+                 
+        desenhar3Chunk :: Terreno -> Float->Float->Texturas -> [Picture]
+        desenhar3Chunk (Estrada v ) posX posY texturas 
+         | v < 0 = [Translate posX posY $ texturas !! 7]   ++ [Translate (posX + tamanhoChunk) posY $ texturas !! 8] ++ [Translate (posX + 2*tamanhoChunk) posY $ texturas !! 9]
+         | otherwise = [Translate posX posY $ texturas !! 10]   ++ [Translate (posX + tamanhoChunk) posY $ texturas !! 11] ++ [Translate (posX + 2*tamanhoChunk) posY $ texturas !! 12]
+        
+
+        desenhar2ChunkL :: Terreno -> Float->Float->Texturas -> [Picture]
+        desenhar2ChunkL (Estrada v ) posX posY texturas 
+         | v <0 = [Translate posX posY $ texturas !! 8]   ++ [Translate (posX + tamanhoChunk) posY $ texturas !! 9] 
+         | otherwise = [Translate posX posY $ texturas !! 11]   ++ [Translate (posX + tamanhoChunk) posY $ texturas !! 12] 
+        
+        desenhar2ChunkR :: Terreno -> Float->Float->Texturas -> [Picture]
+        desenhar2ChunkR (Estrada v ) posX posY texturas 
+         | v <0 = [Translate posX posY $ texturas !! 7]   ++ [Translate (posX + tamanhoChunk) posY $ texturas !! 8] 
+         | otherwise = [Translate posX posY $ texturas !! 10]   ++ [Translate (posX + tamanhoChunk) posY $ texturas !! 11] 
+        
 
         desenharChunk :: Terreno -> Obstaculo -> Float -> Float -> Texturas -> Picture
         desenharChunk (Rio _) Nenhum posX posY texturas = Translate posX posY $ texturas !! 0
         desenharChunk (Rio _) Tronco posX posY texturas = Translate posX posY $ texturas !! 1
         desenharChunk Relva Nenhum posX posY texturas = Translate posX posY $ texturas !! 2
         desenharChunk Relva Arvore posX posY texturas = Translate posX posY $ texturas !! 3
-        desenharChunk (Estrada _) Nenhum posX posY texturas = Translate posX posY $ texturas !! 4
-        desenharChunk (Estrada vel) Carro posX posY texturas = Translate posX posY $ Rotate angle $ texturas !! 5
-          where angle = if vel > 0 then 0 else 180
+        desenharChunk (Estrada _) Nenhum posX posY texturas = Translate posX posY $ texturas !! 4 
+        desenharChunk (Estrada _) Carro posX posY texturas = Translate posX posY $ texturas !! 5
+        -- desenharChunk (Estrada vel) Carro posX posY texturas = Translate posX posY $ Rotate angle $ texturas !! 5
+        --   where angle = if vel > 0 then 0 else 180 
 
         desenharPlayer :: Int -> Int -> Int -> Int -> Picture
         desenharPlayer posXJogador posYJogador larguraMapa tamanhoJanela = Translate posX posY $ color yellow $ texturas !! 6
