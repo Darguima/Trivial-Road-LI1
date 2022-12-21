@@ -31,7 +31,7 @@ desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _,
          | carrosInitFim listaObjetos && v<0 = [Translate (posX) (posY) $ texturas !! 14] ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 1.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures ++ [Translate (350) (posY) $ texturas !! 13 ]
          | otherwise = desenharChunk (Estrada v) chunkAtual posX posY textures :  desenharLinha' ( Estrada v, otherChunks) (posX + tamanhoChunk) posY textures              
         desenharLinha (terreno, chunkAtual : otherChunks) posX posY textures =  desenharChunk terreno chunkAtual posX posY textures :  desenharLinha' (terreno, otherChunks) (posX + tamanhoChunk) posY textures            
-        
+--1,2,3,4      
         desenharLinha' :: LinhaDoMapa -> Float -> Float -> Texturas -> [Picture]
         desenharLinha' (Estrada v, listaObjetos@(chunkAtual:otherChunks) ) posX posY textures
          | take3Cars listaObjetos  = desenhar3Chunk (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v, drop 3 listaObjetos) (posX + 3*tamanhoChunk) posY textures
