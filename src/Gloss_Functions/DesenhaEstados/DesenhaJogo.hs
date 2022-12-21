@@ -22,21 +22,43 @@ desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _,
         desenharLinha (_, []) _ _ _ = []
         desenharLinha (Estrada v, listaObjetos@(chunkAtual:otherChunks) ) posX posY textures
          | take3Cars listaObjetos  = desenhar3Chunk (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v, drop 3 listaObjetos) (posX + 3*tamanhoChunk) posY textures
+         | carros2juntos listaObjetos = desenhar2Carros (Estrada v) posX posY textures ++ desenharLinha' (Estrada v, drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures
          | take2CarsL listaObjetos  && v> 0  = desenhar2ChunkL (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v,  init $ drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures  ++ [Translate (350) (posY) $ texturas !! 10]
          | take2CarsL listaObjetos  && v< 0 = desenhar2ChunkL (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v,  init $ drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures  ++ [Translate (350) (posY) $ texturas !! 7]
          | take2CarsR listaObjetos && v > 0 =[Translate (posX) (posY) $ texturas !! 12]  ++ desenharLinha' (Estrada v,  drop 1 $ reverse.drop 2.reverse $ listaObjetos) (posX + tamanhoChunk) posY textures  ++ desenhar2ChunkR (Estrada v) (250) posY textures
          | take2CarsR listaObjetos && v < 0 =[Translate (posX) (posY) $ texturas !! 9]  ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 2.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures  ++ desenhar2ChunkR (Estrada v) (250) posY textures
+         | carrosInitFim listaObjetos && v> 0 = [Translate (posX) (posY) $ texturas !! 16] ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 1.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures ++ [Translate (350) (posY) $ texturas !! 15]
+         | carrosInitFim listaObjetos && v<0 = [Translate (posX) (posY) $ texturas !! 14] ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 1.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures ++ [Translate (350) (posY) $ texturas !! 13 ]
          | otherwise = desenharChunk (Estrada v) chunkAtual posX posY textures :  desenharLinha' ( Estrada v, otherChunks) (posX + tamanhoChunk) posY textures              
         desenharLinha (terreno, chunkAtual : otherChunks) posX posY textures =  desenharChunk terreno chunkAtual posX posY textures :  desenharLinha' (terreno, otherChunks) (posX + tamanhoChunk) posY textures            
         
         desenharLinha' :: LinhaDoMapa -> Float -> Float -> Texturas -> [Picture]
         desenharLinha' (Estrada v, listaObjetos@(chunkAtual:otherChunks) ) posX posY textures
          | take3Cars listaObjetos  = desenhar3Chunk (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v, drop 3 listaObjetos) (posX + 3*tamanhoChunk) posY textures
+         | carros2juntos listaObjetos = desenhar2Carros (Estrada v) posX posY textures ++ desenharLinha' (Estrada v, drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures
          | otherwise = desenharChunk (Estrada v) chunkAtual posX posY textures :  desenharLinha' ( Estrada v, otherChunks) (posX + tamanhoChunk) posY textures
-        desenharLinha' (_, []) _ _ _ = []
         desenharLinha' (terreno, chunkAtual : otherChunks) posX posY textures = desenharChunk terreno chunkAtual posX posY textures :  desenharLinha' (terreno, otherChunks) (posX + tamanhoChunk) posY textures 
---7   8 9  
+        desenharLinha' (_, []) _ _ _ = []
+
+        desenhar2Carros :: Terreno -> Float->Float->Texturas -> [Picture]
+        desenhar2Carros(Estrada v ) posX posY texturas 
+         | v <0 = [Translate posX posY $ texturas !! 13]   ++ [Translate (posX + tamanhoChunk) posY $ texturas !! 14]
+         | otherwise =[Translate posX posY $ texturas !! 15]   ++ [Translate (posX + tamanhoChunk) posY $ texturas !! 16]
+       
+--[rio, tronco, relva, arvore, estrada, carro, player, carro1, carro2, carro3, carro4, carro5, carro6,carro7,carro8,carro9,carro10]
+        carros2juntos :: [Obstaculo]->Bool
+        carros2juntos [] = False
+        carros2juntos lista 
+         | length lista <2 = False
+         | otherwise  = all (== Carro) (take 2 lista)
+
         
+        carrosInitFim :: [Obstaculo]-> Bool
+        carrosInitFim [] = False
+        carrosInitFim lista@(x:xs)
+         | length lista <2 = False 
+         | otherwise = x == Carro && last xs == Carro 
+
         
         take2CarsR ::  [Obstaculo] -> Bool 
         take2CarsR [] = False 

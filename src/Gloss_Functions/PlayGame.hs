@@ -24,9 +24,13 @@ startGame = do
   carro4 <- loadBMP "src/images/carro4.bmp"
   carro5 <- loadBMP "src/images/carro5.bmp"
   carro6 <- loadBMP "src/images/carro6.bmp"
+  carro7 <- loadBMP "src/images/carro7.bmp"
+  carro8 <- loadBMP "src/images/carro8.bmp"
+  carro9 <- loadBMP "src/images/carro9.bmp"
+  carro10 <- loadBMP "src/images/carro10.bmp"
   tamanhoJanela <- getScreenSize 
 
-  let mapImages = [rio, tronco, relva, arvore, estrada, carro, player, carro1, carro2, carro3, carro4, carro5, carro6]
+  let mapImages = [rio, tronco, relva, arvore, estrada, carro, player, carro1, carro2, carro3, carro4, carro5, carro6,carro7,carro8,carro9,carro10]
 
   playIO dm
     black
