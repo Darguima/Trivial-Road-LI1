@@ -26,19 +26,15 @@ True
 
 -}
 
+largura = 8
+
 jogoTerminou :: Jogo -> Bool
-jogoTerminou (Jogo (Jogador (x,8)) (Mapa largura linhasMapa)) = True
-jogoTerminou (Jogo (Jogador (x,y)) (Mapa largura linhasMapa)) = x<0 ||  auxPosicao largura x ||  auxPosicaoY largura y || auxObstaculos terrenoLinhaAtual (obstaculosLinhaAtual !! x) 
+jogoTerminou (Jogo (Jogador (x,y)) (Mapa largura linhasMapa)) = auxPosicao x ||  auxPosicao y || auxObstaculos terrenoLinhaAtual (obstaculosLinhaAtual !! x) 
   where (terrenoLinhaAtual, obstaculosLinhaAtual) = linhasMapa !! y
+        auxPosicao :: Int -> Bool
+        auxPosicao posicao = posicao < 0 || largura <= posicao
+
         auxObstaculos :: Terreno -> Obstaculo -> Bool
         auxObstaculos (Rio _) Nenhum = True
         auxObstaculos (Estrada _) Carro = True
         auxObstaculos _ _ = False
-
-        auxPosicao :: Int -> Int -> Bool
-        auxPosicao largura posicaoX = largura <= posicaoX
-
-        auxPosicaoY :: Int -> Int -> Bool
-        auxPosicaoY largura posicaoY = largura <= posicaoY
-
-
