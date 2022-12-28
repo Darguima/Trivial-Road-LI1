@@ -18,7 +18,7 @@ import System.Random ( randomRIO )
 
 reageEvento :: Event -> Estado -> IO Estado
 
-reageEvento evento estado@(_, _, _, Menu _, _, _, _, _) = reageEventoMenu evento estado
-reageEvento evento estado@(_, _, _, JOGO, _, _, _, _) = reageEventoJogo evento estado
-reageEvento evento estado@(_, _, _, DERROTA, _, _, _, _) = reageEventoDerrota evento estado
-reageEvento evento estado@(_, _, _, SOBRE, _, _, _, _) = reageEventoSobre evento estado
+reageEvento evento estado@(_, _, _, Menu _, _, _, _, _,_) = reageEventoMenu evento estado
+reageEvento evento estado@(_, _, _, JOGO, _, _, _, _,_) = reageEventoJogo evento estado
+reageEvento evento estado@(_, _, _, DERROTA, _, _, _, _,_) = reageEventoDerrota evento estado
+reageEvento evento estado@(_, _, _, SOBRE, _, _, _, _,_) = reageEventoSobre evento estado

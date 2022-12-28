@@ -7,7 +7,7 @@ import Graphics.Gloss ( Picture(Pictures, Translate, Rotate, Text, Color, Scale)
 import Data.Monoid (Last(getLast))
 
 desenhaEstadoJogo :: Estado -> IO Picture
-desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
+desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
   return $ Pictures $ 
     desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY $ snd tamanhoJanela)
     ++ [desenharPlayer posX posY larguraMapa $ snd tamanhoJanela]
