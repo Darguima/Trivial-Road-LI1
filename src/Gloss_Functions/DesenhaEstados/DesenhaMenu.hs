@@ -10,6 +10,7 @@ import Graphics.Gloss
 
 
 
+
 desenhaEstadoMenu :: Estado -> IO Picture
 desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_JOGAR, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
   return $ Translate 0 0 $ texturas !! 17
@@ -22,19 +23,12 @@ desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_
 desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_NAO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
   return $ Translate 0 0 $ texturas !! 22
 desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_CONTINUAR, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
-  return $ Pictures $ (Translate 0 0 $ texturas !! 23)  : [desenhaPontuacao pontuacaoAtual tamanhoJanela]
+  return $ Pictures $ (Translate 0 0 $ texturas !! 23)  : [desenhaPontuacaoAtual larguraMapa (snd tamanhoJanela) pontuacaoAtual]
 desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_MENU, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
-    return $ Pictures $ (Translate 0 0 $ texturas !! 24)  : [desenhaPontuacao pontuacaoAtual tamanhoJanela]
+    return $ Pictures $ (Translate 0 0 $ texturas !! 24)  : [desenhaPontuacaoAtual larguraMapa (snd tamanhoJanela) pontuacaoAtual]
   
 
-
-desenhaPontuacao :: Int ->  (Int,Int) -> Picture 
-desenhaPontuacao pontuacao (x,y) = Translate (monitorX x) (monitorY y ) $ Color (greyN  0.4)  $ Scale 0.6 0.6 $ Text (show pontuacao) 
-
-monitorX :: Int -> Float 
-monitorX largura = let largurafloat = fromIntegral largura 
-                   in largurafloat * 850 /1920
-
-monitorY :: Int -> Float 
-monitorY altura = let alturafloat = fromIntegral altura
-                   in (-alturafloat * 520 /1080)
+desenhaPontuacaoAtual :: Int -> Int -> Int -> Picture
+desenhaPontuacaoAtual larguraMapa tamanhoJanela score = Translate posX posY $ Scale 0.5 0.5 $ Color white $ Text $ show score 
+    where posX = getInitialX larguraMapa + fromIntegral larguraMapa * tamanhoChunk + 250
+          posY = getInitialY tamanhoJanela - 40

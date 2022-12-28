@@ -36,11 +36,11 @@ startGame = do
   opcao_nao <- loadBMP "src/images/naosair.bmp"
   continuar <- loadBMP "src/images/continuar.bmp"
   menu <- loadBMP "src/images/menu.bmp"
+  derrota<-loadBMP "src/images/derrota.bmp"
   
-  -- tamanhoJanela <- getScreenSize 
   let tamanhoJanela = (1920, 1080)
 
-  let mapImages = [rio, tronco, relva, arvore, estrada, carro, player, carro1, carro2, carro3, carro4, carro5, carro6,carro7,carro8,carro9,carro10,jogar,sobre,sair,sobre_dentro,opcao_sim,opcao_nao,continuar,menu]
+  let mapImages = [rio, tronco, relva, arvore, estrada, carro, player, carro1, carro2, carro3, carro4, carro5, carro6,carro7,carro8,carro9,carro10,jogar,sobre,sair,sobre_dentro,opcao_sim,opcao_nao,continuar,menu,derrota]
 
   playIO dm
     black
