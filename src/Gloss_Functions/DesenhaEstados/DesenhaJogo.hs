@@ -3,13 +3,14 @@ module Gloss_Functions.DesenhaEstados.DesenhaJogo where
 import Data.List (group)
 import LI12223 ( Jogo(Jogo),Jogador(Jogador),Mapa(..),LinhaDoMapa,Obstaculo(..),Terreno(..) )
 import Gloss_Functions.GlossData( Texturas, Estado, PaginaAtual(DERROTA, JOGO), tamanhoChunk, getInitialX, getInitialY )
-import Graphics.Gloss ( Picture(Pictures, Translate, Rotate), green, red, yellow, circle, color )
+import Graphics.Gloss ( Picture(Pictures, Translate, Rotate, Text, Color, Scale), green, red, yellow, circle, color, white )
 
 desenhaEstadoJogo :: Estado -> IO Picture
 desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
   return $ Pictures $ 
     desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY $ snd tamanhoJanela)
     ++ [desenharPlayer posX posY larguraMapa $ snd tamanhoJanela]
+    ++ [desenhaPontuacaoAtual larguraMapa (snd tamanhoJanela) pontuacaoAtual]
 
   where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
   
@@ -111,3 +112,10 @@ desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _,
         desenharPlayer posXJogador posYJogador larguraMapa tamanhoJanela = Translate posX posY $ color yellow $ texturas !! 6
           where posX = getInitialX larguraMapa + fromIntegral posXJogador * tamanhoChunk
                 posY = getInitialY tamanhoJanela - fromIntegral posYJogador * tamanhoChunk
+        
+        desenhaPontuacaoAtual :: Int -> Int -> Int -> Picture
+        desenhaPontuacaoAtual larguraMapa tamanhoJanela score = Translate posX posY $ Scale 0.5 0.5 $ Color white $ Text $ show score ++ " Pontos"
+          where posX = getInitialX larguraMapa + fromIntegral larguraMapa * tamanhoChunk - (tamanhoChunk / 2 - 20)
+                posY = getInitialY tamanhoJanela - 20
+                -- 20 is the padding for text
+ 
