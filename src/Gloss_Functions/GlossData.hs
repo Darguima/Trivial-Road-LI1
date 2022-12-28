@@ -5,10 +5,13 @@ import Graphics.Gloss ( Picture, Display(FullScreen) )
 data OpcoesMenu = OPCAO_JOGAR
             | OPCAO_SOBRE
             | OPCAO_SAIR
+            | OPCAO_SIM
+            | OPCAO_NAO
+            | OPCAO_CONTINUAR
+            | OPCAO_MENU
 
 data PaginaAtual = Menu OpcoesMenu
           | JOGO
-          | PAUSA
           | DERROTA
           | SOBRE
 

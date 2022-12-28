@@ -2,9 +2,9 @@ module Gloss_Functions.DesenhaEstados.DesenhaSobre where
 
 import LI12223 ( Jogador(Jogador), Jogo(Jogo) )
 import Gloss_Functions.GlossData ( Estado )
-import Graphics.Gloss ( green, circle, color, Picture )
+import Graphics.Gloss ( green, circle, color, Picture (Translate) )
 
 desenhaEstadoSobre :: Estado -> IO Picture
 desenhaEstadoSobre (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
-  return $ color green $ circle 20
+ return $ Translate 0 0 $ texturas !! 20
   

@@ -12,7 +12,6 @@ import Gloss_Functions.PlayGame (startGame)
 
 play :: IO ()
 play = startGame
-
 {-|
 O objetivo desta tarefa consiste em aproveitar todas as funcionalidades já
 elaboradas nas outras Tarefas e construir uma aplicação gráfica que permita

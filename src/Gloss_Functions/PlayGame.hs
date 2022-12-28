@@ -28,9 +28,17 @@ startGame = do
   carro8 <- loadBMP "src/images/carro8.bmp"
   carro9 <- loadBMP "src/images/carro9.bmp"
   carro10 <- loadBMP "src/images/carro10.bmp"
+  jogar <- loadBMP "src/images/jogar.bmp"
+  sobre <- loadBMP "src/images/sobre.bmp"
+  sair <- loadBMP "src/images/sair.bmp"
+  sobre_dentro <- loadBMP "src/images/sobre_dentro.bmp"
+  opcao_sim <- loadBMP "src/images/simsair.bmp"
+  opcao_nao <- loadBMP "src/images/naosair.bmp"
+  continuar <- loadBMP "src/images/continuar.bmp"
+  menu <- loadBMP "src/images/menu.bmp"
   tamanhoJanela <- getScreenSize 
 
-  let mapImages = [rio, tronco, relva, arvore, estrada, carro, player, carro1, carro2, carro3, carro4, carro5, carro6,carro7,carro8,carro9,carro10]
+  let mapImages = [rio, tronco, relva, arvore, estrada, carro, player, carro1, carro2, carro3, carro4, carro5, carro6,carro7,carro8,carro9,carro10,jogar,sobre,sair,sobre_dentro,opcao_sim,opcao_nao,continuar,menu]
 
   playIO dm
     black
