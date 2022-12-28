@@ -1,6 +1,6 @@
 module Gloss_Functions.ReageEventos.ReageEventoJogo where
 
-import LI12223 ( Direcao(Direita, Cima, Baixo, Esquerda), Jogada(Move) )
+import LI12223 ( Direcao(Direita, Cima, Baixo, Esquerda), Jogada(Move), Jogador (Jogador), Jogo (Jogo) )
 import Tarefa3_2022li1g031 ( animaJogador )
 import Tarefa4_2022li1g031 ( jogoTerminou )
 import Tarefa5_2022li1g031 ( deslizaJogo )
@@ -9,18 +9,15 @@ import Gloss_Functions.GlossData ( Estado, PaginaAtual(JOGO, DERROTA, Menu), Opc
 
 import Graphics.Gloss.Interface.IO.Game ( Key(SpecialKey), KeyState(Down), SpecialKey(KeySpace, KeyUp, KeyDown, KeyLeft, KeyRight, KeyEsc), Event(EventKey) )
 import System.Random ( randomRIO )
-import Text.ParserCombinators.ReadP (char)
 
 moverJogador :: Estado -> Jogada -> Estado 
-moverJogador (jogo, texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, novaPontuacaoAtual, pontuacoes, larguraMapa, frameAtual)
-  where novoJogo = animaJogador jogo jogada
+moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, novaPontuacaoAtual, pontuacoes, larguraMapa, frameAtual)
+  where novoJogo@(Jogo (Jogador (_, novoY)) _) = animaJogador jogo jogada
         novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO;
 
-        novaPontuacaoAtual
-          | jogada == Move Cima = pontuacaoAtual + 1
-          | jogada == Move Baixo = pontuacaoAtual - 1
-          | otherwise = pontuacaoAtual
-
+        movimentoVertical = yInicial - novoY
+        novaPontuacaoAtual = pontuacaoAtual + movimentoVertical
+        
 reageEventoJogo :: Event -> Estado -> IO Estado
 
 reageEventoJogo (EventKey (SpecialKey KeyUp) Down _ _) estado = return $ moverJogador estado (Move Cima)
