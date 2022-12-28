@@ -28,6 +28,8 @@ reageEventoJogo (EventKey (SpecialKey KeyEsc) Down _ _) (jogo, texturas, tamanho
 reageEventoJogo (EventKey (SpecialKey KeySpace) Down _ _) (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do 
   randomNumber <- randomRIO (1, 100)
   let newGame = deslizaJogo randomNumber jogo
-  return (newGame, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual)
+      novoMenu = if jogoTerminou newGame then DERROTA else JOGO
+  return (newGame, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual)
+
 
 reageEventoJogo _ estado = return estado
