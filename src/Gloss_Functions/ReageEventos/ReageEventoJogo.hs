@@ -11,10 +11,14 @@ import Graphics.Gloss.Interface.IO.Game ( Key(SpecialKey), KeyState(Down), Speci
 import System.Random ( randomRIO )
 
 moverJogador :: Estado -> Jogada -> Estado 
-
-moverJogador (jogo, texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual)
+moverJogador (jogo, texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, novaPontuacaoAtual, pontuacoes, larguraMapa, frameAtual)
   where novoJogo = animaJogador jogo jogada
         novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO;
+
+        novaPontuacaoAtual
+          | jogada == Move Cima = pontuacaoAtual + 1
+          | jogada == Move Baixo = pontuacaoAtual - 1
+          | otherwise = pontuacaoAtual
 
 reageEventoJogo :: Event -> Estado -> IO Estado
 
