@@ -11,6 +11,7 @@ module Tarefa2_2022li1g031 where
 import LI12223
 import Tarefa1_2022li1g031 (checkarTamanhoObstaculosLinha)
 import System.Random
+import Data.List (elemIndex)
 
 
 {- |A função estendeMapa usa duas outras funções auxiliares:
@@ -42,17 +43,31 @@ estendeMapa :: Mapa -> Int -> Mapa
 estendeMapa (Mapa largura linhas) seed = correctMap ( Mapa largura ((novoTerreno, novaLinha) : linhas) ) seed
 
   where novoTerreno = randomChoice (proximosTerrenosValidos (Mapa largura linhas)) seed
-        novaLinha = gerarObstaculos largura (novoTerreno, []) seed
+        novaLinha = gerarObstaculos largura (novoTerreno, []) (head linhas) seed
 
         randomChoice :: [a] -> Int -> a
         randomChoice options randomNumber = options !! mod randomNumber (length options)
 
-        gerarObstaculos :: Int -> LinhaDoMapa -> Int -> [Obstaculo]
-        gerarObstaculos largura (terreno, obstaculosAtuais) seed
-          | null novoObstaculo = obstaculosAtuais
-          | otherwise = gerarObstaculos largura ( terreno, obstaculosAtuais ++ novoObstaculo) (abs ( last randomNumbers))
+        gerarObstaculos :: Int -> LinhaDoMapa -> LinhaDoMapa -> Int -> [Obstaculo]
+        gerarObstaculos largura linhaAtual@(terreno, obstaculosAtuais) linhaAnterior seed
+          | null novoObstaculo = verificarSeOCaminhoEPossivel linhaAtual linhaAnterior
+          | otherwise = gerarObstaculos largura ( terreno, obstaculosAtuais ++ novoObstaculo) linhaAnterior (abs ( last randomNumbers))
           where novoObstaculo = proximoObstaculo largura (terreno, obstaculosAtuais) (abs (head randomNumbers))
                 randomNumbers = geraListaAleatorios seed 2
+
+        verificarSeOCaminhoEPossivel :: LinhaDoMapa -> LinhaDoMapa -> [Obstaculo]
+        verificarSeOCaminhoEPossivel (Relva, obstaculosAtuais) (Relva, obstaculosAnteriores)
+          | (Nenhum, Nenhum) `notElem` zip obstaculosAnteriores obstaculosAtuais = novaLinhaComCaminho
+          | otherwise = obstaculosAtuais
+          where primeiroNenhumNaLinhaAnterior = elemIndex Nenhum obstaculosAnteriores
+                novaLinhaComCaminho = abrirCaminhoNaPosicao obstaculosAtuais primeiroNenhumNaLinhaAnterior
+
+                abrirCaminhoNaPosicao :: [Obstaculo] -> Maybe Int -> [Obstaculo]
+                abrirCaminhoNaPosicao (h : t) (Just index)
+                  | index == 0 = Nenhum : t
+                  | otherwise = h : abrirCaminhoNaPosicao t (Just (index - 1))
+        
+        verificarSeOCaminhoEPossivel (_, obstaculosAtuais) _ = obstaculosAtuais
 
 
         proximoObstaculo :: Int -> LinhaDoMapa -> Int -> [Obstaculo]
