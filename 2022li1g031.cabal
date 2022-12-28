@@ -19,6 +19,7 @@ library
     Tarefa3_2022li1g031
     Tarefa4_2022li1g031
   build-depends:    base ^>=4.16.3.0, random, gloss
+  build-depends:    base ^>=4.16.3.0, random
   hs-source-dirs:   src
   default-language: Haskell2010
 
@@ -30,7 +31,7 @@ executable 2022li1g031
     Tarefa2_2022li1g031
     Tarefa3_2022li1g031
     Tarefa4_2022li1g031
-  build-depends:    base ^>=4.16.3.0
+  build-depends:    base ^>=4.16.3.0, random
   hs-source-dirs:   src
   default-language: Haskell2010
 
@@ -47,6 +48,6 @@ test-suite 2022li1g031-tests
     Tarefa2_2022li1g031_Spec
     Tarefa3_2022li1g031_Spec
     Tarefa4_2022li1g031_Spec
-  build-depends:        base ^>=4.16.3.0, HUnit, random, gloss
+  build-depends:        base ^>=4.16.3.0, HUnit, random, gloss, directory
   hs-source-dirs:       tests src
   default-language:     Haskell2010
