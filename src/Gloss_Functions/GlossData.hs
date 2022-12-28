@@ -1,6 +1,7 @@
 module Gloss_Functions.GlossData where
 import LI12223 ( Jogo(..), Jogador(Jogador), Coordenadas, Mapa(..), Obstaculo(Arvore, Tronco, Carro, Nenhum), Terreno(Relva, Rio, Estrada) )
 import Graphics.Gloss ( Picture, Display(FullScreen) )
+import Data.Monoid (Last(getLast))
 
 data OpcoesMenu = OPCAO_JOGAR
             | OPCAO_SOBRE
@@ -21,6 +22,9 @@ type Texturas = [Picture]
 
 tamanhoChunk :: Float
 tamanhoChunk = 135
+
+getLastX :: Int -> Float 
+getLastX larguraMapa = (fromIntegral larguraMapa * tamanhoChunk)/2  - (tamanhoChunk/2)
 
 getInitialX :: Int -> Float
 getInitialX larguraMapa = - (fromIntegral larguraMapa * tamanhoChunk) / 2 +  (tamanhoChunk / 2)

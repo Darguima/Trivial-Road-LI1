@@ -43,7 +43,7 @@ startGame = do
   playIO dm
     black
     fr
-    (estadoInicial mapImages tamanhoJanela)
+    (estadoInicial mapImages (1920,1080))
     desenharNovoEstado
     reageEvento
     reageTempo

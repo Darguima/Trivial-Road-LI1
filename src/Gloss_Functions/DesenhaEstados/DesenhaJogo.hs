@@ -2,8 +2,9 @@ module Gloss_Functions.DesenhaEstados.DesenhaJogo where
 
 import Data.List (group)
 import LI12223 ( Jogo(Jogo),Jogador(Jogador),Mapa(..),LinhaDoMapa,Obstaculo(..),Terreno(..) )
-import Gloss_Functions.GlossData( Texturas, Estado, PaginaAtual(DERROTA, JOGO), tamanhoChunk, getInitialX, getInitialY )
+import Gloss_Functions.GlossData( Texturas, Estado, PaginaAtual(DERROTA, JOGO), tamanhoChunk, getInitialX, getInitialY, getLastX )
 import Graphics.Gloss ( Picture(Pictures, Translate, Rotate, Text, Color, Scale), green, red, yellow, circle, color, white )
+import Data.Monoid (Last(getLast))
 
 desenhaEstadoJogo :: Estado -> IO Picture
 desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual) = do
@@ -23,12 +24,12 @@ desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _,
         desenharLinha (_, []) _ _ _ = []
         desenharLinha (Estrada v, listaObjetos@(chunkAtual:otherChunks) ) posX posY textures
          | take3Cars listaObjetos  = desenhar3Chunk (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v, drop 3 listaObjetos) (posX + 3*tamanhoChunk) posY textures
-         | take2CarsL listaObjetos  && v> 0  = desenhar2ChunkL (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v,  init $ drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures  ++ [Translate (472.5) (posY) $ texturas !! 10]
-         | take2CarsL listaObjetos  && v< 0 = desenhar2ChunkL (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v,  init $ drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures  ++ [Translate (472.5) (posY) $ texturas !! 7]
-         | take2CarsR listaObjetos && v > 0 =[Translate (posX) (posY) $ texturas !! 12]  ++ desenharLinha' (Estrada v,  drop 1 $ reverse.drop 2.reverse $ listaObjetos) (posX + tamanhoChunk) posY textures  ++ desenhar2ChunkR (Estrada v) (337.5) posY textures
-         | take2CarsR listaObjetos && v < 0 =[Translate (posX) (posY) $ texturas !! 9]  ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 2.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures  ++ desenhar2ChunkR (Estrada v) (337.5) posY textures
-         | carrosInitFim listaObjetos && v> 0 = [Translate (posX) (posY) $ texturas !! 16] ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 1.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures ++ [Translate (472.5) (posY) $ texturas !! 15]
-         | carrosInitFim listaObjetos && v<0 = [Translate (posX) (posY) $ texturas !! 14] ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 1.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures ++ [Translate (472.5) (posY) $ texturas !! 13 ]
+         | take2CarsL listaObjetos  && v> 0  = desenhar2ChunkL (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v,  init $ drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures  ++ [Translate (getLastX larguraMapa) (posY) $ texturas !! 10]
+         | take2CarsL listaObjetos  && v< 0 = desenhar2ChunkL (Estrada v) posX posY textures  ++ desenharLinha' (Estrada v,  init $ drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures  ++ [Translate  (getLastX larguraMapa) (posY) $ texturas !! 7]
+         | take2CarsR listaObjetos && v > 0 =[Translate (posX) (posY) $ texturas !! 12]  ++ desenharLinha' (Estrada v,  drop 1 $ reverse.drop 2.reverse $ listaObjetos) (posX + tamanhoChunk) posY textures  ++ desenhar2ChunkR (Estrada v)  (getLastX larguraMapa - tamanhoChunk) posY textures
+         | take2CarsR listaObjetos && v < 0 =[Translate (posX) (posY) $ texturas !! 9]  ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 2.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures  ++ desenhar2ChunkR (Estrada v) (getLastX larguraMapa - tamanhoChunk) posY textures
+         | carrosInitFim listaObjetos && v> 0 = [Translate (posX) (posY) $ texturas !! 16] ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 1.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures ++ [Translate (getLastX larguraMapa) (posY) $ texturas !! 15]
+         | carrosInitFim listaObjetos && v<0 = [Translate (posX) (posY) $ texturas !! 14] ++ desenharLinha' (Estrada v, drop 1 $ reverse.drop 1.reverse $  listaObjetos) (posX + tamanhoChunk) posY textures ++ [Translate (getLastX larguraMapa) (posY) $ texturas !! 13 ]
          | carros2juntos listaObjetos = desenhar2Carros (Estrada v) posX posY textures ++ desenharLinha' (Estrada v, drop 2 listaObjetos) (posX + 2*tamanhoChunk) posY textures
          | otherwise = desenharChunk (Estrada v) chunkAtual posX posY textures :  desenharLinha' ( Estrada v, otherChunks) (posX + tamanhoChunk) posY textures              
         desenharLinha (terreno, chunkAtual : otherChunks) posX posY textures =  desenharChunk terreno chunkAtual posX posY textures :  desenharLinha' (terreno, otherChunks) (posX + tamanhoChunk) posY textures            
