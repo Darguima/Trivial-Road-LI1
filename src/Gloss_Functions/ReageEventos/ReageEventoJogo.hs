@@ -35,5 +35,14 @@ reageEventoJogo (EventKey (SpecialKey KeyUp) Down _ _) estado = return $ moverJo
 reageEventoJogo (EventKey (SpecialKey KeyDown) Down _ _) estado = return $ moverJogador estado (Move Baixo)
 reageEventoJogo (EventKey (SpecialKey KeyLeft) Down _ _) estado = return $ moverJogador estado (Move Esquerda)
 reageEventoJogo (EventKey (SpecialKey KeyRight) Down _ _) estado = return $ moverJogador estado (Move Direita)
+
 reageEventoJogo (EventKey (SpecialKey KeyEsc) Down _ _) (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = return (jogo, texturas, tamanhoJanela, Menu  OPCAO_CONTINUAR, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
+
+reageEventoJogo (EventKey (SpecialKey KeySpace) Down _ _) (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do 
+  randomNumber <- randomRIO (1, 100)
+  let newGame = deslizaJogo randomNumber jogo
+      novoMenu = if jogoTerminou newGame then DERROTA else JOGO
+  return (newGame, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual, y + 1)
+
+
 reageEventoJogo _ estado = return estado
