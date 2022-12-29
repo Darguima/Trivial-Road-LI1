@@ -12,8 +12,8 @@ reageTempoJogo :: Float -> Estado -> IO Estado
 reageTempoJogo _ (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual, yMin) = do
   randomNumber <- randomRIO (1,100)
   print frameAtual
-  -- let novoJogo = animaMapa jogo
   let novoJogo = deslizaJogo randomNumber $ animaMapa jogo
+  let novoJogo = animaMapa jogo
   let changeGameStatus = mod frameAtual fr == 0
   let novoMenu = if changeGameStatus && jogoTerminou novoJogo then DERROTA else JOGO
   let jogoAtual = if changeGameStatus then novoJogo else jogo

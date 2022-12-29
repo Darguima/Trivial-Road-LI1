@@ -26,8 +26,6 @@ True
 
 -}
 
-largura = 8
-
 jogoTerminou :: Jogo -> Bool
 jogoTerminou (Jogo (Jogador (x,y)) (Mapa largura linhasMapa)) = auxPosicao x ||  auxPosicao y || auxObstaculos terrenoLinhaAtual (obstaculosLinhaAtual !! x) 
   where (terrenoLinhaAtual, obstaculosLinhaAtual) = linhasMapa !! y
