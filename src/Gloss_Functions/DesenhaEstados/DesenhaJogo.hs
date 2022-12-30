@@ -3,20 +3,35 @@ module Gloss_Functions.DesenhaEstados.DesenhaJogo where
 import Data.List (group)
 import LI12223 ( Jogo(Jogo),Jogador(Jogador),Mapa(..),LinhaDoMapa,Obstaculo(..),Terreno(..) )
 import Gloss_Functions.GlossData( Texturas, Estado, PaginaAtual(DERROTA, JOGO), tamanhoChunk, getInitialX, getInitialY, getLastX )
-import Graphics.Gloss ( Picture(Pictures, Translate, Rotate, Text, Color, Scale), green, red, yellow, circle, color, white )
-import Data.Monoid (Last(getLast))
+import Graphics.Gloss ( Picture(Pictures, Translate, Rotate, Text, Color, Scale), green, black, yellow, circle, color, white, rectangleSolid )
+import Gloss_Functions.JogoFluido.JogoFluido (desenhaLinhaFluida)
 
 desenhaEstadoJogo :: Estado -> IO Picture
 desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
   return $ Pictures $ 
     desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY $ snd tamanhoJanela)
+    ++ desenharBordas
     ++ [desenharPlayer posX posY larguraMapa $ snd tamanhoJanela]
     ++ [desenhaPontuacaoAtual larguraMapa (snd tamanhoJanela) pontuacaoAtual]
 
-  where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
-        desenharMapa (Mapa l [linha]) texturas xInicial yInicial = desenharLinha (linha) xInicial yInicial texturas
-        desenharMapa (Mapa l (linhas:outraslinhas)) texturas xInicial yInicial = 
-          desenharLinha (last outraslinhas) xInicial yInicial texturas ++ desenharMapa (Mapa l (init (linhas:outraslinhas))) texturas xInicial (yInicial + tamanhoChunk)
+  where desenharBordas = [
+          Translate (- larguraBorda - (w / 2 - larguraBorda) / 2) 0 $ color black $ rectangleSolid  (w / 2 - larguraBorda) h,
+          Translate (larguraBorda + (w / 2 - larguraBorda) / 2) 0 $ color black $ rectangleSolid (w / 2 - larguraBorda) h
+          ]
+          where w = fromIntegral $ fst tamanhoJanela
+                h = fromIntegral $ snd tamanhoJanela
+                larguraBorda = tamanhoChunk * (fromIntegral larguraMapa / 2)
+
+        desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
+
+        desenharMapa (Mapa l [linha]) texturas xInicial yInicial = desenhaLinhaFluida linhaNaoFluida terreno frameAtual xInicial
+          where linhaNaoFluida = desenharLinha linha xInicial yInicial texturas
+                terreno = fst linha
+
+        desenharMapa (Mapa l (linhas:outrasLinhas)) texturas xInicial yInicial = 
+          desenhaLinhaFluida linhaNaoFluida terreno frameAtual xInicial ++ desenharMapa (Mapa l (init (linhas:outrasLinhas))) texturas xInicial (yInicial + tamanhoChunk)
+          where linhaNaoFluida = desenharLinha (last outrasLinhas) xInicial yInicial texturas
+                terreno = fst $ last outrasLinhas
 
         desenharMapa _ _ _ _ = []
 

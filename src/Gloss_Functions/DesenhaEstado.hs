@@ -2,7 +2,7 @@ module Gloss_Functions.DesenhaEstado where
 
 import Gloss_Functions.GlossData ( Estado, PaginaAtual(DERROTA, Menu, JOGO,  SOBRE) )
 import Gloss_Functions.DesenhaEstados.DesenhaMenu (desenhaEstadoMenu)
-import Gloss_Functions.DesenhaEstados.DesenhaJogoFluido (desenhaEstadoJogo)
+import Gloss_Functions.DesenhaEstados.DesenhaJogo (desenhaEstadoJogo)
 -- import Gloss_Functions.DesenhaEstados.DesenhaPausa (desenhaEstadoPausa)
 import Gloss_Functions.DesenhaEstados.DesenhaDerrota (desenhaEstadoDerrota)
 import Gloss_Functions.DesenhaEstados.DesenhaSobre (desenhaEstadoSobre)

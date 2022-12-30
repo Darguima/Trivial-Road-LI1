@@ -8,7 +8,7 @@ Módulo para a realização da Tarefa 3 do projeto de LI1 em 2022/23.
 -}
 module Tarefa3_2022li1g031 where
 
-import LI12223
+import LI12223 
 import Utils.Utils (extrairVelocidade)
 
 animaJogo :: Jogo -> Jogada -> Jogo
@@ -67,16 +67,16 @@ emArvoreBaixo (x,y) linhasDoMapa
 
 animaMapa :: Jogo -> Jogo
 animaMapa (Jogo (Jogador pos) (Mapa l linhasDoMapa) )
-  | emTronco pos linhasDoMapa = Jogo (Jogador (moveComTronco pos ( Mapa l linhasDoMapa))) (Mapa l  (moveObstaculos pos 0 linhasDoMapa) )
-  | otherwise = Jogo (Jogador pos) (Mapa l (moveObstaculos pos 0 linhasDoMapa) )
+  | emTronco pos linhasDoMapa = Jogo (Jogador (moveComTronco pos ( Mapa l linhasDoMapa))) (Mapa l  novosObstaculos )
+  | otherwise = Jogo (Jogador pos) (Mapa l novosObstaculos)
+  where novosObstaculos = moveObstaculos pos 0 linhasDoMapa
 
 emTronco :: Coordenadas -> [LinhaDoMapa] -> Bool
 emTronco (x,y) linhasDoMapa = ( snd (linhasDoMapa !! y) !! x ) == Tronco
 
 moveComTronco :: Coordenadas -> Mapa -> Coordenadas
-moveComTronco (x,y) (Mapa l linhasDoMapa) = (x + velocidade, y)
-  where
-      (Rio velocidade, obstaculos) = linhasDoMapa !! y
+moveComTronco (x,y) (Mapa _ linhasDoMapa) = (x + velocidade, y)
+  where velocidade = extrairVelocidade (fst $ linhasDoMapa !! y)
 
 moveObstaculos :: Coordenadas -> Int -> [LinhaDoMapa] -> [LinhaDoMapa]
 moveObstaculos _ _  [] = []
