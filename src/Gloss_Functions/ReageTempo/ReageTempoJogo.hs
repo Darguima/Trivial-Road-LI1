@@ -14,6 +14,8 @@ reageTempoJogo _ (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, po
       let novoJogo = animaMapa jogo
           novoJogoDeslize = deslizaJogo (randomNumber) (novoJogo) 
           novoMenu = if jogoTerminou novoJogoDeslize then DERROTA else JOGO
+          
+
       return (novoJogoDeslize, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, 0,ypontos+1)
 
 
@@ -23,6 +25,7 @@ reageTempoJogo _ (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, po
 
   let novoJogo = animaMapa jogo
   let novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO
+
   return (novoJogo, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual+1,ypontos)
 
 

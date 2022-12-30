@@ -10,7 +10,6 @@ import Graphics.Gloss
 
 
 
-
 desenhaEstadoMenu :: Estado -> IO Picture
 desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_JOGAR, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
   return $ Translate 0 0 $ texturas !! 17
