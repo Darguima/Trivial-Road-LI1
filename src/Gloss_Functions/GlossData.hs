@@ -33,10 +33,10 @@ getInitialY :: Int -> Float
 getInitialY alturaJanela = -(fromIntegral alturaJanela / 2) + (tamanhoChunk / 2)
 
 larguraMapa = 8
-mapaInicial = Mapa larguraMapa [(Relva , [Nenhum,Arvore,Nenhum,Arvore,Nenhum ,Arvore,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Nenhum,Nenhum, Nenhum ,Nenhum,Nenhum]), (Estrada (-1) , [Nenhum,Carro,Nenhum,Nenhum,Nenhum,Carro,Nenhum,Nenhum]), (Estrada 1 , [Nenhum,Carro,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Arvore,Arvore,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum, Arvore])] 
+mapaInicial = Mapa larguraMapa [(Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum ,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Nenhum ,Arvore,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Nenhum,Nenhum, Nenhum ,Nenhum,Nenhum]), (Estrada (-1) , [Nenhum,Carro,Nenhum,Nenhum,Nenhum,Carro,Nenhum,Nenhum]), (Estrada 1 , [Nenhum,Carro,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Arvore,Arvore,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum, Arvore])] 
 --Nenhum Nenhum Carro Carro Carro 
 estadoInicial :: Texturas -> (Int, Int) -> Estado
-estadoInicial texturas tamanhoJanela = (Jogo (Jogador (4, 5)) mapaInicial, texturas, tamanhoJanela, Menu OPCAO_JOGAR , 0 , [] , 8, 1,7)
+estadoInicial texturas tamanhoJanela = (Jogo (Jogador (4, 6)) mapaInicial, texturas, tamanhoJanela, Menu OPCAO_JOGAR , 0 , [] , 8, 1,7)
           
                 
 

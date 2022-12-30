@@ -65,6 +65,7 @@ emArvoreBaixo (x,y) linhasDoMapa
  | ( snd (linhasDoMapa !! (y+1)) !! x ) == Arvore = True
  | otherwise= False
 
+-- Não utilizar esta função, utilizar antes a Gloss_Functions.JogoFluido.AnimaMapaFluido
 animaMapa :: Jogo -> Jogo
 animaMapa (Jogo (Jogador pos) (Mapa l linhasDoMapa) )
   | emTronco pos linhasDoMapa = Jogo (Jogador (moveComTronco pos ( Mapa l linhasDoMapa))) (Mapa l  novosObstaculos )
