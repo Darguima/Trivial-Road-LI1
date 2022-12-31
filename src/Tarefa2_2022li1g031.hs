@@ -11,7 +11,6 @@ module Tarefa2_2022li1g031 where
 import LI12223
 import Tarefa1_2022li1g031 (checkarTamanhoObstaculosLinha)
 import System.Random
-import Data.List (elemIndex)
 
 
 {- |A função estendeMapa usa duas outras funções auxiliares:
@@ -40,35 +39,22 @@ geraListaAleatorios :: Semente -> Comprimento -> [Int]
 geraListaAleatorios s c = take c $ randoms (mkStdGen s)
 
 estendeMapa :: Mapa -> Int -> Mapa
-estendeMapa (Mapa largura linhas) seed = correctMap ( Mapa largura ((novoTerreno, novaLinha) : linhas) ) seed
+estendeMapa (Mapa largura linhas) seed = adicionarVelocidade ( Mapa largura linhaMapaPossivel) seed
 
   where novoTerreno = randomChoice (proximosTerrenosValidos (Mapa largura linhas)) seed
-        novaLinha = gerarObstaculos largura (novoTerreno, []) (head linhas) seed
+        novaLinha = gerarObstaculos largura (novoTerreno, []) seed
+        linhaMapaPossivel = verificarRelvas ((novoTerreno, novaLinha) : linhas)
+        -- certificar me que o ma+a gerado não tem caminhos impossiveis com arvores
 
         randomChoice :: [a] -> Int -> a
         randomChoice options randomNumber = options !! mod randomNumber (length options)
 
-        gerarObstaculos :: Int -> LinhaDoMapa -> LinhaDoMapa -> Int -> [Obstaculo]
-        gerarObstaculos largura linhaAtual@(terreno, obstaculosAtuais) linhaAnterior seed
-          | null novoObstaculo = verificarSeOCaminhoEPossivel linhaAtual linhaAnterior
-          | otherwise = gerarObstaculos largura ( terreno, obstaculosAtuais ++ novoObstaculo) linhaAnterior (abs ( last randomNumbers))
+        gerarObstaculos :: Int -> LinhaDoMapa -> Int -> [Obstaculo]
+        gerarObstaculos largura (terreno, obstaculosAtuais) seed
+          | null novoObstaculo = obstaculosAtuais
+          | otherwise = gerarObstaculos largura ( terreno, obstaculosAtuais ++ novoObstaculo) (abs ( last randomNumbers))
           where novoObstaculo = proximoObstaculo largura (terreno, obstaculosAtuais) (abs (head randomNumbers))
                 randomNumbers = geraListaAleatorios seed 2
-
-        verificarSeOCaminhoEPossivel :: LinhaDoMapa -> LinhaDoMapa -> [Obstaculo]
-        verificarSeOCaminhoEPossivel (Relva, obstaculosAtuais) (Relva, obstaculosAnteriores)
-          | (Nenhum, Nenhum) `notElem` zip obstaculosAnteriores obstaculosAtuais = novaLinhaComCaminho
-          | otherwise = obstaculosAtuais
-          where primeiroNenhumNaLinhaAnterior = elemIndex Nenhum obstaculosAnteriores
-                novaLinhaComCaminho = abrirCaminhoNaPosicao obstaculosAtuais primeiroNenhumNaLinhaAnterior
-
-                abrirCaminhoNaPosicao :: [Obstaculo] -> Maybe Int -> [Obstaculo]
-                abrirCaminhoNaPosicao (h : t) (Just index)
-                  | index == 0 = Nenhum : t
-                  | otherwise = h : abrirCaminhoNaPosicao t (Just (index - 1))
-        
-        verificarSeOCaminhoEPossivel (_, obstaculosAtuais) _ = obstaculosAtuais
-
 
         proximoObstaculo :: Int -> LinhaDoMapa -> Int -> [Obstaculo]
         proximoObstaculo largura linhaDoMapa randomNumber
@@ -76,16 +62,59 @@ estendeMapa (Mapa largura linhas) seed = correctMap ( Mapa largura ((novoTerreno
           | otherwise = [randomChoice options randomNumber]
           where options = proximosObstaculosValidos largura linhaDoMapa
         
-        correctMap :: Mapa -> Int -> Mapa
-        correctMap (Mapa largura ((Rio _, obst1) : (Rio k, obst2) : t)) seed
+        -- Verificar se na relva o caminho é possivel ou se as árvores estão a bloquear o caminho todo
+        -- e corrigir caso necessário
+        verificarRelvas :: [LinhaDoMapa] -> [LinhaDoMapa]
+        verificarRelvas ((Relva, obstaculosNovos) : (Relva, obstaculosAnteriores) : outrasLinhas) = abrirCaminho obstaculosNovos obstaculosAnteriores ++ outrasLinhas
+          where abrirCaminho :: [Obstaculo] -> [Obstaculo] -> [LinhaDoMapa]
+                abrirCaminho obstaculosNovos obstaculosAnteriores = [(Relva, obstaculosNovosPossiveis), (Relva, obstaculosAnteriores)]
+
+                encontrarPosicoesLivres :: [Obstaculo] -> [Int]
+                encontrarPosicoesLivres obstaculos = aux obstaculos 0
+                  where aux (Nenhum : proximosObstaculos) index = index : aux proximosObstaculos (index + 1)
+                        aux (_ : proximosObstaculos) index = aux proximosObstaculos (index + 1)
+                        aux _ _ = []
+
+                agruparNumerosVizinhos :: [Int] -> [[Int]]
+                agruparNumerosVizinhos [] = []
+                agruparNumerosVizinhos [x] = [[x]]
+                agruparNumerosVizinhos (h:t)
+                    | (h + 1) == head (head r) = (h : head r) : tail r
+                    | otherwise = [h] : r
+                    where r = agruparNumerosVizinhos t
+
+                posicoesLivresLinhaAnterior = agruparNumerosVizinhos $ encontrarPosicoesLivres obstaculosAnteriores
+                -- ex: [[1, 2, 3], [5, 6, 7], [9, 10]] -> indexes dos "Nenhum" na linha anterior
+
+                temPassagem :: [Obstaculo] -> [Int] -> Bool
+                temPassagem obstaculos (posicao : posicoesSeguintes) = obstaculos !! posicao == Nenhum || temPassagem obstaculos posicoesSeguintes
+                temPassagem _ [] = False
+
+                encontrarArvoresACortar :: [Obstaculo] -> [[Int]] -> [Int]
+                encontrarArvoresACortar obstaculos (posicoes : outrasPosicoes)
+                  | temPassagem obstaculos posicoes = encontrarArvoresACortar obstaculos outrasPosicoes
+                  | otherwise = head posicoes : encontrarArvoresACortar obstaculos outrasPosicoes
+                encontrarArvoresACortar _ _ = []
+                
+                lenhador :: [Obstaculo] -> [Int] -> [Obstaculo]
+                lenhador obstaculos (indexArvore : indexesOutrasArvores) = lenhador linhaComMenosUmaArvore indexesOutrasArvores
+                  where linhaComMenosUmaArvore = x ++ [Nenhum] ++ ys
+                        (x,_:ys) = splitAt indexArvore obstaculos
+                lenhador obstaculos _ = obstaculos
+                
+                arvoresACortar = encontrarArvoresACortar obstaculosNovos posicoesLivresLinhaAnterior
+                obstaculosNovosPossiveis = lenhador obstaculosNovos arvoresACortar
+        
+        verificarRelvas linhas = linhas
+        
+        adicionarVelocidade :: Mapa -> Int -> Mapa
+        adicionarVelocidade (Mapa largura ((Rio _, obst1) : (Rio k, obst2) : t)) seed
           | k < 0 = Mapa largura ((Rio (randomChoice [1, 2, 3, 4] seed ), obst1) : (Rio k, obst2) : t)
           | otherwise = Mapa largura ((Rio (randomChoice [-4, -3, -2, -1] seed), obst1) : (Rio k, obst2) : t)
-        
-
-        correctMap (Mapa largura ((Rio k, obst) : t)) seed = Mapa largura ((Rio (randomChoice [-3, -2, -1, 1, 2, 3] seed), obst) : t)
-        correctMap (Mapa largura ((Estrada k, obst) : t)) seed = Mapa largura ((Estrada (randomChoice [-3, -2, -1, 1, 2, 3] seed), obst) : t)
-        correctMap (Mapa largura ((Relva, obst) : t)) seed = Mapa largura ((Relva, obst) : t)
-        correctMap (Mapa largura obst) seed = Mapa largura obst
+        adicionarVelocidade (Mapa largura ((Rio k, obst) : t)) seed = Mapa largura ((Rio (randomChoice [-3, -2, -1, 1, 2, 3] seed), obst) : t)
+        adicionarVelocidade (Mapa largura ((Estrada k, obst) : t)) seed = Mapa largura ((Estrada (randomChoice [-3, -2, -1, 1, 2, 3] seed), obst) : t)
+        adicionarVelocidade (Mapa largura ((Relva, obst) : t)) seed = Mapa largura ((Relva, obst) : t)
+        adicionarVelocidade (Mapa largura obst) seed = Mapa largura obst
 
 
 
