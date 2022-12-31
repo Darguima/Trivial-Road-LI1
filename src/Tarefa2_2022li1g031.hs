@@ -12,6 +12,10 @@ import LI12223
 import Tarefa1_2022li1g031 (checkarTamanhoObstaculosLinha)
 import System.Random
 
+type Comprimento = Int
+type Semente = Int
+geraListaAleatorios :: Semente -> Comprimento -> [Int]
+geraListaAleatorios s c = take c $ randoms (mkStdGen s)
 
 {- |A função estendeMapa usa duas outras funções auxiliares:
   * proximosTerrenosValidos
@@ -23,6 +27,11 @@ dado mapa. Assume-se que o mapa dado é válido. O parâmetro do tipo Int
 é um inteiro aleatório (no intervalo [0, 100]) que é usado para acrescentar
 alguma pseudo-aleatoriedade à geração da nova linha.
 
+Esta função tem o cuidado de verificar se nos terrenos de Relva o caminho é possível,
+  ou seja, se as árvores não bloqueiam o caminho. Isso é feito, verificando se existe
+  pelo menos um Nenhum acessível na linha seguinte, sem precisar recuar no mapa.
+  -> Função `verificarRelvas`
+
 == Exemplos de utilização:
 >>> estendeMapa (Mapa 5 []) 5
 Mapa 5 [(Relva,[Arvore,Arvore,Arvore,Arvore,Nenhum])] 
@@ -31,12 +40,6 @@ Mapa 5 [(Relva,[Arvore,Arvore,Arvore,Arvore,Nenhum])]
 Mapa 5 [(Relva,[Arvore,Arvore,Arvore,Arvore,Nenhum])] 
 
 -}
-
-
-type Comprimento = Int
-type Semente = Int
-geraListaAleatorios :: Semente -> Comprimento -> [Int]
-geraListaAleatorios s c = take c $ randoms (mkStdGen s)
 
 estendeMapa :: Mapa -> Int -> Mapa
 estendeMapa (Mapa largura linhas) seed = adicionarVelocidade ( Mapa largura linhaMapaPossivel) seed
@@ -62,19 +65,40 @@ estendeMapa (Mapa largura linhas) seed = adicionarVelocidade ( Mapa largura linh
           | otherwise = [randomChoice options randomNumber]
           where options = proximosObstaculosValidos largura linhaDoMapa
         
-        -- Verificar se na relva o caminho é possivel ou se as árvores estão a bloquear o caminho todo
-        -- e corrigir caso necessário
+        {- |A função verificarRelvas vai:
+
+        1. analisar as posições que estão disponíveis na linha de Relva - `encontrarPosicoesLivres`
+        2. Agrupar essas posições por posições vizinhas - `agruparNumerosVizinhos`
+        3. Verificar se dentro destes grupos existe pelo menos algum que à sua frente tenha um Nenhum
+        4. Em caso negativo reescreve um Nenhum no elemento mais à esquerda
+
+        == Exemplos de utilização:
+        >>> verificarRelvas [(Relva, [Arvore, Arvore, Arvore, Arvore]), (Relva, [Arvore, Nenhum, Nenhum, Arvore])]
+        [(Relva, [Arvore, Nenhum, Arvore, Arvore]), (Relva, [Arvore, Nenhum, Nenhum, Arvore])]
+        -}
         verificarRelvas :: [LinhaDoMapa] -> [LinhaDoMapa]
         verificarRelvas ((Relva, obstaculosNovos) : (Relva, obstaculosAnteriores) : outrasLinhas) = abrirCaminho obstaculosNovos obstaculosAnteriores ++ outrasLinhas
           where abrirCaminho :: [Obstaculo] -> [Obstaculo] -> [LinhaDoMapa]
                 abrirCaminho obstaculosNovos obstaculosAnteriores = [(Relva, obstaculosNovosPossiveis), (Relva, obstaculosAnteriores)]
 
+                {- |A função encontrarPosicoesLivres vai retornar os indices de todos os `Nenhum` dentro de uma linha
+
+                == Exemplos de utilização:
+                >>> encontrarPosicoesLivres [Arvore, Nenhum, Nenhum, Arvore]
+                [1, 2]
+                -}
                 encontrarPosicoesLivres :: [Obstaculo] -> [Int]
                 encontrarPosicoesLivres obstaculos = aux obstaculos 0
                   where aux (Nenhum : proximosObstaculos) index = index : aux proximosObstaculos (index + 1)
                         aux (_ : proximosObstaculos) index = aux proximosObstaculos (index + 1)
                         aux _ _ = []
 
+                {- |A função agruparNumerosVizinhos vai agrupar números vizinhos na reta numérica
+
+                == Exemplos de utilização:
+                >>> agruparNumerosVizinhos [1, 2, 3, 5, 7, 8]
+                [[1, 2, 3], [5], [7, 8]]
+                -}
                 agruparNumerosVizinhos :: [Int] -> [[Int]]
                 agruparNumerosVizinhos [] = []
                 agruparNumerosVizinhos [x] = [[x]]
@@ -84,11 +108,25 @@ estendeMapa (Mapa largura linhas) seed = adicionarVelocidade ( Mapa largura linh
                     where r = agruparNumerosVizinhos t
 
                 posicoesLivresLinhaAnterior = agruparNumerosVizinhos $ encontrarPosicoesLivres obstaculosAnteriores
-                -- ex: [[1, 2, 3], [5, 6, 7], [9, 10]] -> indexes dos "Nenhum" na linha anterior
 
+                {- |A função temPassagem vai dizer se na linha seguinte, cada grupo de números vizinhos tem pelo menos
+                  uma casa sem obstáculos (com Nenhum)
+
+                == Exemplos de utilização:
+                >>> temPassagem [Nenhum, Arvore, Nenhum, Nenhum] [[1, 2, 3]]
+                True
+
+                >>> temPassagem [Arvore, Arvore, Arvore, Nenhum] [[1, 2, 3]]
+                False
+                -}
                 temPassagem :: [Obstaculo] -> [Int] -> Bool
                 temPassagem obstaculos (posicao : posicoesSeguintes) = obstaculos !! posicao == Nenhum || temPassagem obstaculos posicoesSeguintes
                 temPassagem _ [] = False
+
+                {- |A função encontrarArvoresACortar e lenhador trabalham juntas para descobrirem, com a ajuda da `temPassagem`
+                      qual das posições têm arvores que precisam de desaparecer para tornar o caminho possível. Todos os grupos
+                      de números vizinhos que não tinham passagem para a frente vão ter a sua árvore mais à esquerda aqui selecionada
+                -}
 
                 encontrarArvoresACortar :: [Obstaculo] -> [[Int]] -> [Int]
                 encontrarArvoresACortar obstaculos (posicoes : outrasPosicoes)
@@ -106,6 +144,8 @@ estendeMapa (Mapa largura linhas) seed = adicionarVelocidade ( Mapa largura linh
                 obstaculosNovosPossiveis = lenhador obstaculosNovos arvoresACortar
         
         verificarRelvas linhas = linhas
+
+        {- |A função adicionarVelocidade é responsável por receber o mapa com velocidades geradas a 0 e aleatoriamente atribuir lhes uma entre -3 e 3 -}
         
         adicionarVelocidade :: Mapa -> Int -> Mapa
         adicionarVelocidade (Mapa largura ((Rio _, obst1) : (Rio k, obst2) : t)) seed
