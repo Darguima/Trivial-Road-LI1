@@ -1,13 +1,41 @@
+{- |
+Module      : Gloss_Functions.PlayGame
+Description : Interface Gráfica do jogo
+Copyright   : Afonso Gonçalves Pedreira <a104537@alunos.uminho.pt>
+              Dário Silva Guimarães  <a104344@alunos.uminho.pt>
+
+Módulo responsável pela interface gráfica do Jogo.
+-}
+
 module Gloss_Functions.PlayGame where
 
 import Gloss_Functions.GlossData ( Texturas, Estado, PaginaAtual(JOGO, DERROTA), fr, dm, estadoInicial )
+
 import Gloss_Functions.DesenhaEstado (desenharNovoEstado)
 import Gloss_Functions.ReageEvento (reageEvento)
 import Gloss_Functions.ReageTempo (reageTempo)
 
 import Graphics.Gloss ( loadBMP ) 
-import Graphics.Gloss.Interface.Environment ( getScreenSize )
 import Graphics.Gloss.Interface.IO.Game ( black, playIO )
+
+{- | A função 
+
+== Exemplos de utilização:
+>>> c
+r
+-}
+
+{- | A função startGame é a responsável por comunicar diretamente com o Gloss.
+  Para isso ela usa os módulos:
+
+  * `Gloss_Functions.DesenhaEstado`
+  * `Gloss_Functions.ReageEvento`
+  * `Gloss_Functions.ReageTempo`
+  * `Gloss_Functions.GlossData`
+
+== Exemplos de utilização:
+>>> startGame
+-}
 
 startGame :: IO ()
 startGame = do 

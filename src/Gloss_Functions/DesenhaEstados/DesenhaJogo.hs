@@ -1,3 +1,10 @@
+{- |
+Module      : Gloss_Functions.ReageTempo.ReageTempoJogo
+Description : Função auxiliar à `desenharNovoEstado` para página de jogo
+Copyright   : Afonso Gonçalves Pedreira <a104537@alunos.uminho.pt>
+              Dário Silva Guimarães  <a104344@alunos.uminho.pt>
+-}
+
 module Gloss_Functions.DesenhaEstados.DesenhaJogo where
 
 import Data.List (group)
@@ -6,9 +13,22 @@ import Gloss_Functions.GlossData( Texturas, Estado, PaginaAtual(DERROTA, JOGO), 
 import Graphics.Gloss ( Picture(Pictures, Translate, Rotate, Text, Color, Scale), green, black, yellow, circle, color, white, rectangleSolid )
 import Gloss_Functions.JogoFluido.DesenhaJogoFluido (deslizaMapaFluido, desenhaLinhaFluida)
 
--- desenhaEstadoJogoFluido
--- Esta desenhaEstadoJogo está feita para criar um jogo fluído horizontalmente e verticalmente
--- Para isso ela usa funções próprias ao invés das pedidas nos enunciados
+{- | Função auxiliar à `desenharNovoEstado` para página de jogo.
+
+Esta desenhaEstadoJogo está feita para criar um jogo fluído horizontalmente e verticalmente
+Para isso ela usa funções próprias ao invés das pedidas nos enunciados.
+Essas funções próprias são
+
+  * `Gloss_Functions.JogoFluido.AnimaMapaFluido`
+  * `Gloss_Functions.JogoFluido.desenhaLinhaFluida`
+  * `Gloss_Functions.JogoFluido.deslizaMapaFluido`
+  * `Gloss_Functions.JogoFluido.jogoFluidoTerminou`
+
+Para realizar o seu trabalho a função reparte o mapa em linhas e depois em chunks.
+Para construir camiões e autocarros foi necessário criar várias funções auxiliares para desenhar os vários casos possíveis que podia aparecer
+Também são desenhadas duas bordas laterais para esconder a magia por de trás da fluidez do jogo
+-}
+
 desenhaEstadoJogo :: Estado -> IO Picture
 desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
   return $ Pictures $ 

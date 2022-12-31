@@ -1,7 +1,16 @@
+{- |
+Module      : Gloss_Functions.GlossData
+Description : Informação para o Gloss
+Copyright   : Afonso Gonçalves Pedreira <a104537@alunos.uminho.pt>
+              Dário Silva Guimarães  <a104344@alunos.uminho.pt>
+
+Módulo com informação constante ou útil para o gloss e restante jogo.
+Aqui são definidas constantes como o frame rate (`fr`), `data types` e por diante.
+-}
+
 module Gloss_Functions.GlossData where
 import LI12223 ( Jogo(..), Jogador(Jogador), Coordenadas, Mapa(..), Obstaculo(Arvore, Tronco, Carro, Nenhum), Terreno(Relva, Rio, Estrada) )
 import Graphics.Gloss ( Picture, Display(FullScreen) )
-import Data.Monoid (Last(getLast))
 
 data OpcoesMenu = OPCAO_JOGAR
             | OPCAO_SOBRE
@@ -34,7 +43,6 @@ getInitialY alturaJanela = -(fromIntegral alturaJanela / 2) + (tamanhoChunk / 2)
 
 larguraMapa = 8
 mapaInicial = Mapa larguraMapa [(Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum ,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Arvore,Nenhum ,Arvore,Nenhum,Nenhum]), (Relva , [Nenhum,Arvore,Nenhum,Nenhum,Nenhum, Nenhum ,Nenhum,Nenhum]), (Estrada (-1) , [Nenhum,Carro,Nenhum,Nenhum,Nenhum,Carro,Nenhum,Nenhum]), (Estrada 1 , [Nenhum,Carro,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum]), (Relva , [Arvore,Arvore,Nenhum,Nenhum,Nenhum,Nenhum, Nenhum, Arvore])] 
---Nenhum Nenhum Carro Carro Carro 
 estadoInicial :: Texturas -> (Int, Int) -> Estado
 estadoInicial texturas tamanhoJanela = (Jogo (Jogador (4, 6)) mapaInicial, texturas, tamanhoJanela, Menu OPCAO_JOGAR , 0 , [] , 8, 1,7)
           

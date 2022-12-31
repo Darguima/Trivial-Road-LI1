@@ -1,3 +1,10 @@
+{- |
+Module      : Gloss_Functions.ReageEvento
+Description : Funções que reage aos eventos do jogador
+Copyright   : Afonso Gonçalves Pedreira <a104537@alunos.uminho.pt>
+              Dário Silva Guimarães  <a104344@alunos.uminho.pt>
+-}
+
 module Gloss_Functions.ReageEvento where
 
 import Gloss_Functions.GlossData ( Estado, PaginaAtual(SOBRE, Menu, JOGO, DERROTA) )
@@ -8,6 +15,10 @@ import Gloss_Functions.ReageEventos.ReageEventoDerrota (reageEventoDerrota)
 import Gloss_Functions.ReageEventos.ReageEventoSobre (reageEventoSobre)
 
 import Graphics.Gloss.Interface.IO.Game ( Event(EventKey))
+
+{- | A função reageEvento recebe um evento do gloss, e transmite a às suas funções auxiliares.
+  Cada `Gloss_Functions.GlossData.PaginaAtual` tem a sua função auxiliar no Pacote `Gloss_Functions.ReageEventos`
+-}
 
 reageEvento :: Event -> Estado -> IO Estado
 

@@ -1,3 +1,10 @@
+{- |
+Module      : Gloss_Functions.ReageTempo.ReageTempoJogo
+Description : Função auxiliar à `reageTempo` para página de jogo
+Copyright   : Afonso Gonçalves Pedreira <a104537@alunos.uminho.pt>
+              Dário Silva Guimarães  <a104344@alunos.uminho.pt>
+-}
+
 module Gloss_Functions.ReageTempo.ReageTempoJogo where
 
 import LI12223
@@ -6,6 +13,8 @@ import Gloss_Functions.JogoFluido.JogoFluidoTerminou (jogoFluidoTerminou)
 import Gloss_Functions.GlossData (Estado, PaginaAtual (DERROTA, JOGO), fr)
 import System.Random (randomRIO)
 import Tarefa5_2022li1g031 (deslizaJogo)
+
+{- | Função auxiliar à `reageTempo` para página de jogo -}
 
 reageTempoJogo :: Float -> Estado -> IO Estado
 reageTempoJogo _ (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual, yMin) = do
