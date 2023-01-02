@@ -10,11 +10,15 @@ data OpcoesMenu = OPCAO_JOGAR
             | OPCAO_NAO
             | OPCAO_CONTINUAR
             | OPCAO_MENU
+            |OPCAO_COMANDOS
+            | OPCAO_JOGADOR
+            | OPCAO_BOT 
 
 data PaginaAtual = Menu OpcoesMenu
           | JOGO
           | DERROTA
           | SOBRE
+          | BOT
 
 -- type Estado = (Jogo, Texturas, tamanhoJanela, PaginaAtual, PontuaçãoAtual, Pontuações, LarguraDoMapa, frameAtual)
 type Estado = (Jogo, Texturas, (Int, Int), PaginaAtual, Int , [Int], Int, Int,Int)
@@ -37,7 +41,7 @@ mapaInicial = Mapa 8 [(Relva , [Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum,Nenhum
 estadoInicial :: Texturas -> (Int, Int) -> Estado
 estadoInicial texturas tamanhoJanela = (Jogo (Jogador getPosInicial) mapaInicial, texturas, tamanhoJanela, Menu OPCAO_JOGAR , 0 , [] , 8, 0,7)
   where getPosInicial :: Coordenadas
-        getPosInicial = (4,7)
+        getPosInicial = (4,6)
           
                 
 

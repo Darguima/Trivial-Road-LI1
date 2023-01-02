@@ -10,7 +10,7 @@ desenhaEstadoJogo :: Estado -> IO Picture
 desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
   return $ Pictures $ 
     desenharMapa mapa texturas (getInitialX larguraMapa) (getInitialY $ snd tamanhoJanela)
-    ++ [desenharPlayer posX posY larguraMapa $ snd tamanhoJanela]
+    ++ [desenharPlayer frameAtual posX posY larguraMapa $ snd tamanhoJanela]
     ++ [desenhaPontuacaoAtual larguraMapa (snd tamanhoJanela) pontuacaoAtual]
 
   where desenharMapa :: Mapa -> Texturas -> Float -> Float -> [Picture]
@@ -100,19 +100,22 @@ desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _,
         
 
         desenharChunk :: Terreno -> Obstaculo -> Float -> Float -> Texturas -> Picture
-        desenharChunk (Rio _) Nenhum posX posY texturas = Translate posX posY $ texturas !! 0
+        desenharChunk (Rio _) Nenhum posX posY texturas =  Translate posX posY $ texturas !! 0
         desenharChunk (Rio _) Tronco posX posY texturas = Translate posX posY $ texturas !! 1
         desenharChunk Relva Nenhum posX posY texturas = Translate posX posY $ texturas !! 2
         desenharChunk Relva Arvore posX posY texturas = Translate posX posY $ texturas !! 3
         desenharChunk (Estrada _) Nenhum posX posY texturas = Translate posX posY $ texturas !! 4 
-        desenharChunk (Estrada _) Carro posX posY texturas = Translate posX posY $ texturas !! 5
+        desenharChunk (Estrada v) Carro posX posY texturas 
+         | v > 0 = Translate posX posY $ texturas !! 5
+         |otherwise = Translate posX posY $ texturas !! 28
+
         -- desenharChunk (Estrada vel) Carro posX posY texturas = Translate posX posY $ Rotate angle $ texturas !! 5
         --   where angle = if vel > 0 then 0 else 180 
 
-        desenharPlayer :: Int -> Int -> Int -> Int -> Picture
-        desenharPlayer posXJogador posYJogador larguraMapa tamanhoJanela = Translate posX posY $ color yellow $ texturas !! 6
-          where posX = getInitialX larguraMapa + fromIntegral posXJogador * tamanhoChunk
-                posY = getInitialY tamanhoJanela + (7-fromIntegral posYJogador) * tamanhoChunk
+        desenharPlayer ::Int-> Int -> Int -> Int -> Int -> Picture
+        desenharPlayer fr posXJogador posYJogador larguraMapa tamanhoJanela = Translate posX posY $ color yellow $ texturas !! 6
+         where posX = getInitialX larguraMapa + fromIntegral posXJogador * tamanhoChunk
+               posY = getInitialY tamanhoJanela + (7-fromIntegral posYJogador) * tamanhoChunk
         
         desenhaPontuacaoAtual :: Int -> Int -> Int -> Picture
         desenhaPontuacaoAtual larguraMapa tamanhoJanela score = Translate posX posY $ Scale 0.5 0.5 $ Color white $ Text $ show score ++ " Pontos"

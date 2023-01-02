@@ -25,6 +25,13 @@ desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_
   return $ Pictures $ (Translate 0 0 $ texturas !! 23)  : [desenhaPontuacaoAtual larguraMapa (snd tamanhoJanela) pontuacaoAtual]
 desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_MENU, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
     return $ Pictures $ (Translate 0 0 $ texturas !! 24)  : [desenhaPontuacaoAtual larguraMapa (snd tamanhoJanela) pontuacaoAtual]
+desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_COMANDOS, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
+  return $ Translate 0 0 $ texturas !! 27
+desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_JOGADOR, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
+  return $ Translate 0 0 $ texturas !! 30
+desenhaEstadoMenu (Jogo (Jogador pos) mapa, texturas, tamanhoJanela, Menu OPCAO_BOT, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
+  return $ Translate 0 0 $ texturas !! 29
+
   
 
 desenhaPontuacaoAtual :: Int -> Int -> Int -> Picture

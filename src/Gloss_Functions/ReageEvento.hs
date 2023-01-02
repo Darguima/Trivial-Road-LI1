@@ -14,6 +14,7 @@ import Gloss_Functions.ReageEventos.ReageEventoSobre (reageEventoSobre)
 
 import Graphics.Gloss.Interface.IO.Game ( Event(EventKey), Key(SpecialKey), KeyState(Down), SpecialKey(KeySpace, KeyUp, KeyDown, KeyLeft, KeyRight) )
 import System.Random ( randomRIO )
+import Gloss_Functions.ReageEventos.ReageEventoBot (reageEventoBot)
 
 
 reageEvento :: Event -> Estado -> IO Estado
@@ -22,3 +23,4 @@ reageEvento evento estado@(_, _, _, Menu _, _, _, _, _,_) = reageEventoMenu even
 reageEvento evento estado@(_, _, _, JOGO, _, _, _, _,_) = reageEventoJogo evento estado
 reageEvento evento estado@(_, _, _, DERROTA, _, _, _, _,_) = reageEventoDerrota evento estado
 reageEvento evento estado@(_, _, _, SOBRE, _, _, _, _,_) = reageEventoSobre evento estado
+reageEvento evento estado@(_, _, _, BOT, _, _, _, _,_) = reageEventoBot evento estado

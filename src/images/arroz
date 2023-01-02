@@ -1,0 +1,1 @@
+writeFile "highscore1.txt" ( show pontuacaoAtual) && renameFile "highscore1.txt" "highscore.txt"

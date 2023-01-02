@@ -11,15 +11,15 @@ import Graphics.Gloss.Interface.IO.Game ( Key(SpecialKey), KeyState(Down), Speci
 import System.Random ( randomRIO )
 
 moverJogador :: Estado -> Jogada -> Estado 
-moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) (Move Cima)
+moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) (Move Cima)
   |  novoY <  y = (novoJogo, texturas, tamanhoJanela, novoMenu, novaPontuacaoAtual novoY y pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,novoY)
-  | otherwise = (novoJogo, texturas, tamanhoJanela, novoMenu, novaPontuacaoAtual novoY y pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
+  | otherwise = (novoJogo, texturas, tamanhoJanela, novoMenu,  pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
 
 
    where novoJogo@(Jogo (Jogador (_, novoY)) _) = animaJogador jogo (Move Cima)
          novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO;
     
-moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
+moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, _, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
   where novoJogo@(Jogo (Jogador (_, novoY)) _) = animaJogador jogo jogada
         novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO;
 
