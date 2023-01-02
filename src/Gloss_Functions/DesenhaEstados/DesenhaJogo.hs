@@ -134,12 +134,15 @@ desenhaEstadoJogo (Jogo (Jogador (posX, posY)) mapa, texturas, tamanhoJanela, _,
         
 
         desenharChunk :: Terreno -> Obstaculo -> Float -> Float -> Texturas -> Picture
-        desenharChunk (Rio _) Nenhum posX posY texturas = Translate posX posY $ texturas !! 0
+        desenharChunk (Rio _) Nenhum posX posY texturas =  Translate posX posY $ texturas !! 0
         desenharChunk (Rio _) Tronco posX posY texturas = Translate posX posY $ texturas !! 1
         desenharChunk Relva Nenhum posX posY texturas = Translate posX posY $ texturas !! 2
         desenharChunk Relva Arvore posX posY texturas = Translate posX posY $ texturas !! 3
         desenharChunk (Estrada _) Nenhum posX posY texturas = Translate posX posY $ texturas !! 4 
-        desenharChunk (Estrada _) Carro posX posY texturas = Translate posX posY $ texturas !! 5
+        desenharChunk (Estrada v) Carro posX posY texturas 
+         | v > 0 = Translate posX posY $ texturas !! 5
+         |otherwise = Translate posX posY $ texturas !! 28
+
         -- desenharChunk (Estrada vel) Carro posX posY texturas = Translate posX posY $ Rotate angle $ texturas !! 5
         --   where angle = if vel > 0 then 0 else 180 
 

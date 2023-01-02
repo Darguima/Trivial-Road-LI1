@@ -19,11 +19,15 @@ data OpcoesMenu = OPCAO_JOGAR
             | OPCAO_NAO
             | OPCAO_CONTINUAR
             | OPCAO_MENU
+            |OPCAO_COMANDOS
+            | OPCAO_JOGADOR
+            | OPCAO_BOT 
 
 data PaginaAtual = Menu OpcoesMenu
           | JOGO
           | DERROTA
           | SOBRE
+          | BOT
 
 -- type Estado = (Jogo, Texturas, tamanhoJanela, PaginaAtual, PontuaçãoAtual, Pontuações, LarguraDoMapa, frameAtual, yMin)
 type Estado = (Jogo, Texturas, (Int, Int), PaginaAtual, Int , [Int], Int, Int,Int)

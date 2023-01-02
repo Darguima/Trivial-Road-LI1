@@ -37,7 +37,7 @@ reageEventoJogo (EventKey (SpecialKey KeySpace) Down _ _) (jogo, texturas, taman
 
 reageEventoJogo _ estado = return estado
 
-{- | Função auxiliar à `reageEventoJogo` responsável por mover o jogador no mapa, detetando colisões fatais e calculando novas pontuações -}
+{- | Função auxiliar à `reageEventoJogo` responsável por mover o jogador no mapa, detetando colisões fatais e calculando novas pontuações (função `novaPontuacaoAtual`) -}
 
 moverJogador :: Estado -> Jogada -> Estado 
 moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) (Move Cima)
@@ -47,12 +47,14 @@ moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, JO
 
   where novoJogo@(Jogo (Jogador (_, novoY)) _) = animaJogador jogo (Move Cima)
         novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO;
-
-        novaPontuacaoAtual :: Int -> Int -> Int -> Int
-        novaPontuacaoAtual  novoY y pontuacao 
-                | novoY<y = pontuacao+1
-                | otherwise = pontuacao
     
 moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) jogada = (novoJogo, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
   where novoJogo@(Jogo (Jogador (_, novoY)) _) = animaJogador jogo jogada
         novoMenu = if jogoTerminou novoJogo then DERROTA else JOGO;
+
+{- | Função usada para calcular as novas pontuações -}
+
+novaPontuacaoAtual :: Int -> Int -> Int -> Int
+novaPontuacaoAtual  novoY y pontuacao 
+        | novoY<y = pontuacao+1
+        | otherwise = pontuacao
