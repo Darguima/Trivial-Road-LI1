@@ -119,7 +119,7 @@ reageEventoMenu (EventKey (SpecialKey KeyRight) Down _ _) (newGame, texturas, ta
   return (newGame, texturas, tamanhoJanela,  Menu OPCAO_JOGADOR, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
 
 reageEventoMenu (EventKey (SpecialKey KeyEnter) Down _ _) (Jogo jogador (Mapa l mapa), texturas, tamanhoJanela, Menu OPCAO_BOT, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) = do
-  let novoMapa = Mapa l (drop 1 mapa)
+  let novoMapa = mapaInicialBot
   let newGame = Jogo jogador novoMapa
   return (newGame, texturas, tamanhoJanela, BOT, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
 

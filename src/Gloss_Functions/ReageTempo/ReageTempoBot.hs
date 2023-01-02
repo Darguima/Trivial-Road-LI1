@@ -1,3 +1,13 @@
+{- |
+Module      : Gloss_Functions.ReageTempo.ReageTempoBot
+Description : Função auxiliar à `reageTempo` para página do Bot 
+Copyright   : Afonso Gonçalves Pedreira <a104537@alunos.uminho.pt>
+              Dário Silva Guimarães  <a104344@alunos.uminho.pt>
+-}
+
+
+
+
 module Gloss_Functions.ReageTempo.ReageTempoBot where
 import Bot (moveBot)
 import System.Random (randomRIO)

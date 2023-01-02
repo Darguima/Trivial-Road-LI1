@@ -21,11 +21,10 @@ reageTempoJogo _ (jogo, texturas, tamanhoJanela, paginaAtual, pontuacaoAtual, po
   randomNumber <- randomRIO (1,100)
 
   let changeGameStatus = mod frameAtual fr == 0
-
   let frameSeguinte = animaMapaFluido jogo frameAtual
   let novoJogo = if changeGameStatus then deslizaJogo randomNumber frameSeguinte else frameSeguinte
-  let novoYMin = if changeGameStatus then yMin else yMin + 1
-
+  let novoYMin = if changeGameStatus then yMin+1 else yMin
+  
   let novoMenu = if jogoFluidoTerminou novoJogo changeGameStatus frameAtual then DERROTA else JOGO
   let novoFrameAtual = if changeGameStatus then 1 else frameAtual + 1
 

@@ -42,7 +42,7 @@ reageEventoJogo _ estado = return estado
 moverJogador :: Estado -> Jogada -> Estado 
 moverJogador (jogo@(Jogo (Jogador (_, yInicial)) _), texturas, tamanhoJanela, JOGO, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y) (Move Cima)
   | novoY < y = (novoJogo, texturas, tamanhoJanela, novoMenu, novaPontuacaoAtual novoY y pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,novoY)
-  | otherwise = (novoJogo, texturas, tamanhoJanela, novoMenu, novaPontuacaoAtual novoY y pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
+  | otherwise = (novoJogo, texturas, tamanhoJanela, novoMenu, pontuacaoAtual, pontuacoes, larguraMapa, frameAtual,y)
 
 
   where novoJogo@(Jogo (Jogador (_, novoY)) _) = animaJogador jogo (Move Cima)

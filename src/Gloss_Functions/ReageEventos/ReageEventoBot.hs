@@ -1,3 +1,11 @@
+{- |
+Module      : Gloss_Functions.ReageTempo.ReageTempoBot
+Description : Função auxiliar à `reageEvento` para página do Bot
+Copyright   : Afonso Gonçalves Pedreira <a104537@alunos.uminho.pt>
+              Dário Silva Guimarães  <a104344@alunos.uminho.pt>
+-}
+
+
 module Gloss_Functions.ReageEventos.ReageEventoBot where
 
 import Gloss_Functions.GlossData (Estado, PaginaAtual (DERROTA, Menu, BOT), OpcoesMenu (OPCAO_JOGAR, OPCAO_CONTINUAR), estadoInicial)
