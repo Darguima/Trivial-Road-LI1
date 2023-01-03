@@ -2,7 +2,8 @@
 
 ## Demo
 
-https://user-images.githubusercontent.com/49988070/210126385-5422d8ed-aa8e-4d65-b4f0-81b8a62927c6.mp4
+https://user-images.githubusercontent.com/49988070/210379668-3602bce1-2cd6-43e8-901b-61e537cb54d5.mp4
+
 ###### Se estás no GitLab (ou por outro motivo isto é só um link), ou vais ao [GitHub](https://github.com/Darguima/Trivial-Road#demo), vês o ficheiro original ([GitHub](https://github.com/Darguima/Trivial-Road/blob/main/readme/demo.mp4) [GitLab](https://gitlab.com/uminho-di/li1/2223/projetos/2022li1g031/blob/main/readme/demo.mp4)), ou simplesmente abre o link.
 
 Também podes sempre contar com umas fotos
