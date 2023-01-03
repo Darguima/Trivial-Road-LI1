@@ -13,6 +13,9 @@ Também podes sempre contar com umas fotos
   <img src="./readme/demo_landing.png" style='width: 45%'/>
 </h1>
 
+## Download 📥📲
+
+Podes transferir este jogo nas [releases do GitHub](https://github.com/Darguima/Trivial-Road/releases).
 
 ## Repositório
 
