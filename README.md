@@ -38,13 +38,14 @@ Para compilar o código podes usar o `cabal`:
 
 ```bash
 $ mkdir TrivialRoad -p
+$ rm -r ./dist-newstyle/build &> /dev/null
 $ cabal build
 $ mv ./src/Main ./TrivialRoad/trivialRoad
 $ cp ./assets ./TrivialRoad -r
 $ cp ./highscore.txt ./TrivialRoad
 
 # Single Command
-$ mkdir TrivialRoad -p; cabal build; mv ./src/Main ./TrivialRoad/trivialRoad; cp ./assets ./TrivialRoad -r; cp ./highscore.txt ./TrivialRoad
+$ mkdir TrivialRoad -p; rm -r ./dist-newstyle/build &> /dev/null; cabal build; mv ./src/Main ./TrivialRoad/trivialRoad; cp ./assets ./TrivialRoad -r; cp ./highscore.txt ./TrivialRoad
 ```
 
 Será gerada uma pasta `TrivialRoad` que contém todos os arquivos necessários para o jogo ser executado.
