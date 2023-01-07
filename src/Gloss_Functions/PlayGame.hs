@@ -18,7 +18,6 @@ import Gloss_Functions.ReageTempo (reageTempo)
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Environment ( getScreenSize )
 import Graphics.Gloss.Interface.IO.Game ( black, playIO )
-import Graphics.Gloss.Juicy (loadJuicyPNG)
 
 {- | A função 
 
@@ -47,7 +46,7 @@ startGame = do
   arvore <- loadBMP "src/images/arvore.bmp"
   estrada <- loadBMP "src/images/estrada.bmp"
   carro <- loadBMP "src/images/carro.bmp"
-  (Just player) <- loadJuicyPNG "src/images/player.png"
+  player <- loadBMP "src/images/player.bmp"
   carro1 <- loadBMP "src/images/carro1.bmp"
   carro2 <- loadBMP "src/images/carro2.bmp"
   carro3 <- loadBMP "src/images/carro3.bmp"
