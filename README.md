@@ -34,24 +34,24 @@ $ cd 2022li1g031
 
 ## Compilador
 
-Para compilar o código podes usar o `Stack`:
+Para compilar o código podes usar o `cabal`:
 
 ```bash
 $ mkdir TrivialRoad -p
-$ stack build
-$ cp ./.stack-work/install/*/*/*/bin/2022li1g031 ./TrivialRoad/trivialRoad
+$ cabal build
+$ mv ./src/Main ./TrivialRoad/trivialRoad
 $ cp ./assets ./TrivialRoad -r
 $ cp ./highscore.txt ./TrivialRoad
 
 # Single Command
-$ mkdir TrivialRoad -p; stack build; cp ./.stack-work/install/*/*/*/bin/2022li1g031 ./TrivialRoad/trivialRoad; cp ./assets ./TrivialRoad -r; cp ./highscore.txt ./TrivialRoad
+$ mkdir TrivialRoad -p; cabal build; mv ./src/Main ./TrivialRoad/trivialRoad; cp ./assets ./TrivialRoad -r; cp ./highscore.txt ./TrivialRoad
 ```
 
 Será gerada uma pasta `TrivialRoad` que contém todos os arquivos necessários para o jogo ser executado.
 
 ```bash
 # No Linux
-./TrivialRoad/trivialRoad
+$ ./TrivialRoad/trivialRoad
 ```
 
 Agora podes comprimir a pasta e envia-la para qualquer lado, sem necessidade de teres o Haskell em outros computadores.
