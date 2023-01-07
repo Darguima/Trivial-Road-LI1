@@ -20,19 +20,41 @@ Podes transferir este jogo nas [releases do GitHub](https://github.com/Darguima/
 
 ## Repositório
 
-Se tiver chave SSH configurada no GitLab pode fazer clone com o seguinte link:
+Para clonar o repositório usa um dos seguintes comandos
 
 ```bash
+# Por HTTPS
+$ git clone https://gitlab.com/uminho-di/li1/2223/projetos/2022li1g031.git
+$ cd 2022li1g031
+
+# Por SSH
 $ git clone git@gitlab.com:uminho-di/li1/2223/2022li1g031.git
 $ cd 2022li1g031
 ```
 
-Alternativamente, pode fazer clone por https com o seguinte link:
+## Compilador
+
+Para compilar o código podes usar o `Stack`:
 
 ```bash
-$ git clone https://gitlab.com/uminho-di/li1/2223/projetos/2022li1g031.git
-$ cd 2022li1g031
+$ mkdir TrivialRoad -p
+$ stack build
+$ cp ./.stack-work/install/*/*/*/bin/2022li1g031 ./TrivialRoad/trivialRoad
+$ cp ./assets ./TrivialRoad -r
+$ cp ./highscore.txt ./TrivialRoad
+
+# Single Command
+$ mkdir TrivialRoad -p; stack build; cp ./.stack-work/install/*/*/*/bin/2022li1g031 ./TrivialRoad/trivialRoad; cp ./assets ./TrivialRoad -r; cp ./highscore.txt ./TrivialRoad
 ```
+
+Será gerada uma pasta `TrivialRoad` que contém todos os arquivos necessários para o jogo ser executado.
+
+```bash
+# No Linux
+./TrivialRoad/trivialRoad
+```
+
+Agora podes comprimir a pasta e envia-la para qualquer lado, sem necessidade de teres o Haskell em outros computadores.
 
 ## Interpretador
 
@@ -43,12 +65,14 @@ o interpretador.
 
 ```bash
 $ cabal repl
+>>> main
 ```
 
-2. Usando o GHCi
+2. Usando o GHCi (na pasta root do projeto)
 
 ```bash
 $ ghci -i="src" -i="tests" src/Main.hs
+>>> main
 ```
 
 ## Testes
