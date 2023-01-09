@@ -14,13 +14,27 @@ Também podes sempre contar com umas fotos
   <img src="./readme/demo_landing.png" style='width: 45%'/>
 </h1>
 
-### GamePad
+### GamePad 🎮
 
 O jogo é compatível com GamePads :)
 
 ###### Mentira, basta dares remap do comando com [`qjoypad`](https://github.com/panzi/qjoypad) para as teclas que usas
 
 https://user-images.githubusercontent.com/49988070/211230247-414fadf8-816c-45dc-8da8-826a0fe67c37.mp4
+
+### Features
+
+* Jogo Fluído
+* Bot
+* Não existem caminhos impossíveis nos caminhos de Relva (existe sempre uma passagem entre as árvores)
+* Sistema de Pontuação, que notifica quando foi atingida a pontuação máxima
+
+### Controlos ⌨️ (Apenas Teclado)
+
+* **Setas** - Mover o jogador
+* **Space** - Avança o mapa sem mover o jogador
+* **Esc** - Entrar no modo Pausa
+* **Enter / Space** - Seleciona as opções dentro dos Menus
 
 ## Download 📥📲
 

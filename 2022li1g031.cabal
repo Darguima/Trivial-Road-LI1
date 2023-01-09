@@ -1,12 +1,17 @@
 cabal-version:      2.4
 name:               2022li1g031
-version:            0.1.0.0
+version:            1.0.2.0
 
 -- A short (one-line) description of the package.
 -- synopsis:
 
+Trivial Road is clone of the popular game Crossy Road.
+
 -- A longer description of the package.
 -- description:
+
+Trivial Road is clone of the popular game Crossy Road.
+Was developed to LI1, a first semester unit of the Computer Science Engineering course of the University of Minho.
 
 author:             Afonso Gonçalves Pedreira <a104537@alunos.uminho.pt>
                     Dário Silva Guimarães  <a104344@alunos.uminho.pt>
