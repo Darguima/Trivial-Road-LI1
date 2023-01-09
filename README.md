@@ -14,6 +14,14 @@ Também podes sempre contar com umas fotos
   <img src="./readme/demo_landing.png" style='width: 45%'/>
 </h1>
 
+### GamePad
+
+O jogo é compatível com GamePads :)
+
+###### Mentira, basta dares remap do comando com [`qjoypad`](https://github.com/panzi/qjoypad) para as teclas que usas
+
+https://user-images.githubusercontent.com/49988070/211230247-414fadf8-816c-45dc-8da8-826a0fe67c37.mp4
+
 ## Download 📥📲
 
 Podes transferir este jogo nas [releases do GitHub](https://github.com/Darguima/Trivial-Road/releases).
