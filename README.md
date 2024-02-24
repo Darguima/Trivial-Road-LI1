@@ -1,4 +1,4 @@
-# Laboratórios de Informática I
+# Trivial-Road LI1
 
 ## Demo
 
