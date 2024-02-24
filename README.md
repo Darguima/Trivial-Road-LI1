@@ -1,62 +1,63 @@
 # Trivial-Road LI1
 
-## Demo
+## About the Project
+
+This project was developed for the LI1 University of Minho Subject of the Software Engineering degree. This was our first project developed in the university and we were very impressed with the result.
+
+#### Grade ⭐️ 19/20
+
+### Demo 📽️
+
+![Demo Image](./readme/demo.png)
 
 https://user-images.githubusercontent.com/49988070/210379668-3602bce1-2cd6-43e8-901b-61e537cb54d5.mp4
 
-###### Se estás no GitLab (ou por outro motivo isto é só um link), ou vais ao [GitHub](https://github.com/Darguima/Trivial-Road#demo), vês o ficheiro original ([GitHub](https://github.com/Darguima/Trivial-Road/blob/main/readme/demo.mp4) [GitLab](https://gitlab.com/uminho-di/li1/2223/projetos/2022li1g031/blob/main/readme/demo.mp4)), ou simplesmente abre o link.
-
-Também podes sempre contar com umas fotos
-
-<h1 align="center">
-  <img src="./readme/demo_jogo.png" style='width: 80%'/>
-  <img src="./readme/demo_creditos.png" style='width: 45%'/>
-  <img src="./readme/demo_landing.png" style='width: 45%'/>
-</h1>
-
 ### GamePad 🎮
 
-O jogo é compatível com GamePads :)
+The game is compatible with gamepads.
 
-###### Mentira, basta dares remap do comando com [`qjoypad`](https://github.com/panzi/qjoypad) para as teclas que usas
+###### I'm lying, just remap the gamepad with [`qjoypad`](https://github.com/panzi/qjoypad)
 
 https://user-images.githubusercontent.com/49988070/211230247-414fadf8-816c-45dc-8da8-826a0fe67c37.mp4
 
 ### Features
 
-* Jogo Fluído
+* Smooth Gameplay
 * Bot
-* Não existem caminhos impossíveis nos caminhos de Relva (existe sempre uma passagem entre as árvores)
-* Sistema de Pontuação, que notifica quando foi atingida a pontuação máxima
+* There are no impossible paths in the grass paths (there is always a passage between the trees)
+* Scoring System, which notifies when the maximum score has been achieved
 
-### Controlos ⌨️ (Apenas Teclado)
+### Controls ⌨️ (Keyboard Only)
 
-* **Setas** - Mover o jogador
-* **Space** - Avança o mapa sem mover o jogador
-* **Esc** - Entrar no modo Pausa
-* **Enter / Space** - Seleciona as opções dentro dos Menus
+* **Arrows** - Move the player
+* **Space** - Advances the map without moving the player
+* **Esc** - Enter Pause mode
+* **Enter / Space** - Select options within the Menus
 
 ## Download 📥📲
 
-Podes transferir este jogo nas [releases do GitHub](https://github.com/Darguima/Trivial-Road/releases).
+You can download the game on [project's releases](https://github.com/Darguima/Trivial-Road-LI1/releases).
 
-## Repositório
+### The goal ⛳️
 
-Para clonar o repositório usa um dos seguintes comandos
+As you can easily see on the demo, the goal was develop a clone of Crossy Road game with Gloss library from Haskell.
+
+### About the Code 🧑‍💻
+
+Trying to bring our past coding knowledge to the project, we tried at maximum modularize the code, and make it as clean as possible. We also tried to use the best practices of the functional programming paradigm.
+
+## Getting Started 🚀
+
+#### Cloning the repository
 
 ```bash
-# Por HTTPS
-$ git clone https://gitlab.com/uminho-di/li1/2223/projetos/2022li1g031.git
-$ cd 2022li1g031
-
-# Por SSH
-$ git clone git@gitlab.com:uminho-di/li1/2223/2022li1g031.git
-$ cd 2022li1g031
+$ git clone https://github.com/Darguima/Trivial-Road-LI1.git
+$ git clone git@github.com:Darguima/Trivial-Road-LI1.git
 ```
 
-## Compilador
+## Compiler
 
-Para compilar o código podes usar o `cabal`:
+To compile the code you can use `cabal`:
 
 ```bash
 $ mkdir TrivialRoad -p
@@ -70,47 +71,46 @@ $ cp ./highscore.txt ./TrivialRoad
 $ mkdir TrivialRoad -p; rm -r ./dist-newstyle/build &> /dev/null; cabal build; mv ./src/Main ./TrivialRoad/trivialRoad; cp ./assets ./TrivialRoad -r; cp ./highscore.txt ./TrivialRoad
 ```
 
-Será gerada uma pasta `TrivialRoad` que contém todos os arquivos necessários para o jogo ser executado.
+It will generate a `TrivialRoad` folder that contains all the necessary files for the game to run.
 
 ```bash
-# No Linux
+# Linux
 $ ./TrivialRoad/trivialRoad
 ```
 
-Agora podes comprimir a pasta e envia-la para qualquer lado, sem necessidade de teres o Haskell em outros computadores.
+Now you can compress the folder and send it anywhere, without the need to have Haskell on other computers.
 
-## Interpretador
+## Interpreter
 
-Pode abrir o interpretador do Haskell (GHCi) utilizando o cabal ou diretamente
-o interpretador.
+You can open the Haskell interpreter (GHCi) using cabal or directly in the interpreter.
 
-1. Usando o `cabal`
+1. With `cabal`
 
 ```bash
 $ cabal repl
 >>> main
 ```
 
-2. Usando o GHCi (na pasta root do projeto)
+2. With GHCi (on root folder of the project)
 
 ```bash
 $ ghci -i="src" -i="tests" src/Main.hs
 >>> main
 ```
 
-## Testes
+## Tests
 
-O projecto utiliza a biblioteca [HUnit](https://hackage.haskell.org/package/HUnit) para fazer testes unitários.
+This project uses the [HUnit](https://hackage.haskell.org/package/HUnit) library to run unit tests.
 
-Pode correr os testes utilizando uma das seguintes alternativas:
+You can run the tests using one of the following alternatives:
 
-1. Usando o `cabal`
+1. With `cabal`
 
 ```bash
 $ cabal test
 ```
 
-2. Usando o GHCi
+2. With GHCi
 
 ```bash
 $ ghci -i="src" -i="tests" tests/Spec.hs
@@ -121,29 +121,29 @@ $ ghci -i="src" -i="tests" tests/Spec.hs
 >>> main -- Correr todos os testes
 ```
 
-3. Usando o wrapper `runhaskell`
+3. With the wrapper `runhaskell`
 
 ```bash
 $ runhaskell -i="src" -i="tests" tests/Spec.hs
 ```
 
-## Documentação
+## Docs
 
-Pode gerar a documentação com o [Haddock](https://haskell-haddock.readthedocs.io/).
+You can generate the documentation with [Haddock](https://haskell-haddock.readthedocs.io/).
 
-1. Usando o `cabal`
+1. With `cabal`
 
 ```bash
 $ cabal haddock --haddock-all
 ```
 
-2. Usando diretamente o `haddock`
+2. With `haddock`
 
 ```bash
 $ haddock -h -o doc/html src/*.hs
 ```
 
-## Grupo 31
+## Developed by 🧑‍💻:
 
-- **A104537** Afonso Gonçalves Pedreira;
-- **A104344** Dário Silva Guimarães ;
+- [Afonso Pedreira](https://github.com/afooonso)
+- [Dário Guimarães](https://github.com/darguima)
